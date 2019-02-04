@@ -7,7 +7,7 @@ GPIO.setup(18,GPIO.OUT)
 
 print("LED on")
 
-for i in range(0,2):
+for i in range(0,4):
     GPIO.output(18, GPIO.HIGH)
     time.sleep(1)
     GPIO.output(18, GPIO.LOW)
