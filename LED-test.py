@@ -9,9 +9,9 @@ print("LED on")
 
 for i in range(0,4):
     GPIO.output(18, GPIO.HIGH)
-    time.sleep(1)
+    time.sleep(0.2)
     GPIO.output(18, GPIO.LOW)
-    time.sleep(1)
+    time.sleep(0.2)
 
 print("LED off")
 GPIO.cleanup()
