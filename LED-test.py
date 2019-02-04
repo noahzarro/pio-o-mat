@@ -4,7 +4,9 @@ import time
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(18,GPIO.OUT)
+GPIO.setup(23,GPIO.OUT)
 
+print("Deborah ist wunderschön")
 print("LED on")
 
 for i in range(0,4):
