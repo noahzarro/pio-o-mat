@@ -9,7 +9,7 @@ GPIO.setup(23,GPIO.OUT)
 print("Deborah ist wunderschön")
 print("LED on")
 
-for i in range(0,4):
+for i in range(0,99):
     GPIO.output(18, GPIO.HIGH)
     GPIO.output(23, GPIO.LOW)
     time.sleep(0.2)
