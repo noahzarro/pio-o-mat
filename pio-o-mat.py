@@ -1,4 +1,4 @@
-# pio-o-mat, for managing beer consumption at serafins rümli
+# pio-o-mat, for managing beer consumption at serafins ruemli
 
 from luma.core.interface.serial import i2c, spi
 from luma.core.render import canvas
