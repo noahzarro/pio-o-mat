@@ -12,6 +12,12 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+import SimpleMFRC522
+
+# setup reader
+myReader = SimpleMFRC522.SimpleMFRC522()
+result = myReader.read()
+
 # Load default font.
 font = ImageFont.load_default()
 
@@ -45,10 +51,12 @@ else:
 
 device = sh1106(serial, rotate=2)  # sh1106
 
+print(result)
+
 try:
     with canvas(device) as draw:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
-        draw.text((30, 40), "ur an fagit", fill="white")
+        draw.text((30, 40), "Suc se cuk", fill="white")
 except:
     print("except")
 
