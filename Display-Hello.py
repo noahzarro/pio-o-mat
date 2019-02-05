@@ -36,6 +36,7 @@ try:
     with canvas(device) as draw:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
         draw.text((0, 0), "Suc se cuk", fill="white")
+        draw.text((0, 8), "Fagitoli", fill="white")
 except:
     print("except")
 
