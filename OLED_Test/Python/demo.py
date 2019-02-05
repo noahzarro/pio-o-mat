@@ -31,7 +31,7 @@ bottom = height-padding
 x = 0
 
 RST = 25
-CS = 8		
+CS = 7
 DC = 24
 
 USER_I2C = 0

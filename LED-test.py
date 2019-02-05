@@ -9,8 +9,8 @@ GPIO.setup(23,GPIO.OUT)
 
 print("LED on")
 
-for i in range(0,99):
-    print("Deborah ist wunderschön "+str(i))
+for i in range(0,100):
+    print("Nummer "+str(i))
     GPIO.output(18, GPIO.HIGH)
     GPIO.output(23, GPIO.LOW)
     time.sleep(0.2)
