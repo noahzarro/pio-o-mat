@@ -46,11 +46,11 @@ else:
 device = sh1106(serial, rotate=2)  # sh1106
 
 try:
-    while True:
-        with canvas(device) as draw:
-            # draw.rectangle(device.bounding_box, outline="white", fill="black")
-            draw.text((30, 40), "Hello World", fill="white")
+    with canvas(device) as draw:
+        # draw.rectangle(device.bounding_box, outline="white", fill="black")
+        draw.text((30, 40), "Hello World", fill="white")
 except:
     print("except")
+
 GPIO.cleanup()
 
