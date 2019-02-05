@@ -48,7 +48,7 @@ device = sh1106(serial, rotate=2)  # sh1106
 try:
     with canvas(device) as draw:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
-        draw.text((30, 40), "Hello World", fill="white")
+        draw.text((30, 40), "ur an fagit", fill="white")
 except:
     print("except")
 
