@@ -16,7 +16,7 @@ from PIL import ImageFont
 
 import SimpleMFRC522
 
-import piorist.py
+import piorist
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
