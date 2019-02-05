@@ -18,8 +18,6 @@ import SimpleMFRC522
 myReader = SimpleMFRC522.SimpleMFRC522()
 result = myReader.read()
 
-# Load default font.
-font = ImageFont.load_default()
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
@@ -27,31 +25,17 @@ width = 128
 height = 64
 image = Image.new('1', (width, height))
 
-# First define some constants to allow easy resizing of shapes.
-padding = -2
-top = padding
-bottom = height - padding
-# Move left to right keeping track of the current x position for drawing shapes.
-x = 0
 
 RST = 25
 CS = 8
 DC = 24
 
-USER_I2C = 0
-
-if USER_I2C == 1:
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(RST, GPIO.OUT)
-    GPIO.output(RST, GPIO.HIGH)
-
-    serial = i2c(port=1, address=0x3c)
-else:
-    serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
+serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
 
 device = sh1106(serial, rotate=2)  # sh1106
 
 print(result)
+
 
 try:
     with canvas(device) as draw:
