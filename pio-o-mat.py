@@ -110,10 +110,12 @@ def pio():
     # check id
     myReader = SimpleMFRC522.SimpleMFRC522()
     r = myReader.read()
+    print(r[1])
     try:
         user_id=int(r[1])
     except:
         user_id=0
+        print("id not valid")
     if user_id!=0:
         response = piorist.pay_pio(user_id,pio_preis)
         display_title("Pio", draw)
