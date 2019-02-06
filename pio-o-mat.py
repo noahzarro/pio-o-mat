@@ -147,9 +147,9 @@ while True:
         if len(menus[current_menu].sub) != 0: # if there are any submenus, display menu screen, otherwise call function
             if draw_menu(device, menus[current_menu], selection):
                 break
-            else:
-                print()
-                globals()[menus[current_menu].function]()
+        else:
+            print()
+            globals()[menus[current_menu].function]()
 
 
 
