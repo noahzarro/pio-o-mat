@@ -334,7 +334,7 @@ def info():
         if button_ok.pressed():
             return "back"
 
-def send():
+def send_money():
     with canvas(device) as draw:
         display_title("Info", draw)
         draw.text((8, title_height), "Karte bitte", fill="white")
