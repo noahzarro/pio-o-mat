@@ -74,6 +74,7 @@ def new_account():
     if r[1]=="":
         user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         myReader.write(str(user_id))
+        print(user_id)
 
 
     # wait for user input
