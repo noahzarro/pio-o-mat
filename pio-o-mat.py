@@ -77,7 +77,7 @@ def new_account():
         try:
             user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         except:
-            print("kein neuer piorist erstellt" + sys.exc_info()[0])
+            print("kein neuer piorist erstellt" + str(sys.exc_info()[0]))
         myReader.write(str(user_id))
         print(user_id)
 
