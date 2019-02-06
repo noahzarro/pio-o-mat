@@ -77,3 +77,14 @@ def delete_piorist(user_id):
 
     with open("list.pio", "w") as write_file:
         json.dump(piorists, write_file)
+
+def change_balance(user_id,amount):
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+
+    for piorist in piorists:
+        if int(piorist["card_id"])==user_id:
+            piorist["balance"] += amount
+
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists, write_file)

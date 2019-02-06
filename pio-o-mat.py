@@ -42,8 +42,6 @@ def draw_menu(device, menu, selection):
             # draw submenus
             i=0
             for submenu in menu.sub:
-                print(submenu)
-                print(menus[submenu])
                 draw.text((8,title_height+i*8),menus[submenu].title, fill="white")
                 i += 1
             # draw selection
@@ -232,7 +230,7 @@ def delete_account():
     # check if user exists do not delete
     user = piorist.get_piorist(user_id)
     if user is not None:
-        if user["balance"] < 0.1:
+        if user["balance"] > 0.1:
             with canvas(device) as draw:
                 display_title("Benutzer entfernen", draw)
                 draw.text((8, title_height), "Kontostand von", fill="white")
@@ -336,6 +334,150 @@ def info():
         if button_ok.pressed():
             return "back"
 
+def send():
+    with canvas(device) as draw:
+        display_title("Info", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
+    try:
+        user_id=int(read_id)
+    except:
+        user_id=0
+
+    # gets user data
+    user = piorist.get_piorist(user_id)
+
+    # check if master
+    if read_id == master_id:
+        user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154}
+
+    money_send = 0
+    changed_send = True
+
+    if user is not None:
+        while True:
+            if button_down.pressed():
+                money_send -= 100
+                changed_send = True
+                if money_send < 0:
+                    money_send = 0
+
+            if button_up.pressed():
+                money_send += 100
+                changed_send = True
+                if money_send > user["balance"]:
+                    money_send = user["balance"]
+
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                break
+
+            if changed_send:
+                changed_send = False
+                with canvas(device) as draw:
+                    display_title("Geld senden", draw)
+                    draw.text((8, title_height), user["vulgo"], fill="white")
+                    draw.text((8, title_height + 8), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
+                    draw.text((8, title_height + 16), "senden: " + str(money_send)/100.0 + " Fr.", fill="white")
+    else:
+        with canvas(device) as draw:
+            display_title("Geld senden", draw)
+            draw.text((8, title_height), "Benutzer nicht", fill="white")
+            draw.text((8, title_height + 8), "gefunden", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    with canvas(device) as draw:
+        display_title("Geld senden", draw)
+        draw.text((8, title_height), "Zweite", fill="white")
+        draw.text((8, title_height + 8), "Karte bitte", fill="white")
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
+    try:
+        user_id = int(read_id)
+    except:
+        user_id = 0
+
+    # gets user data
+    user2 = piorist.get_piorist(user_id)
+
+    if user2 is None:
+        with canvas(device) as draw:
+            display_title("Geld senden", draw)
+            draw.text((8, title_height), "Benutzer nicht", fill="white")
+            draw.text((8, title_height + 8), "gefunden", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    with canvas(device) as draw:
+        display_title("Geld senden", draw)
+        draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
+        draw.text((8, title_height + 8), str(money_send) / 100.0 + " Fr.", fill="white")
+        draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "senden?", fill="white")
+
+    # wait for confirmation
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    with canvas(device) as draw:
+        display_title("Geld senden", draw)
+        draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
+        draw.text((8, title_height + 8), str(money_send) / 100.0 + " Fr.", fill="white")
+        draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "gesendet", fill="white")
+
+    # update balance
+    if not user["card_id"] == master_id:
+        piorist.change_balance(user["card_id"],-money_send)
+    piorist.change_balance(user2["card_id"],money_send)
+
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -352,6 +494,9 @@ device = sh1106(serial, rotate=2)  # sh1106
 
 # empty card
 empty_card = "                                                "
+
+# master_id
+master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
 # pio preis
 pio_preis = 60
