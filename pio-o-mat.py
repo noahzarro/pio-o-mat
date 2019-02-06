@@ -25,8 +25,6 @@ import json
 
 
 def draw_menu(device, menu, selection):
-    print(title_height)
-    print(menu.title)
     try:
         with canvas(device) as draw:
             # clear everything
