@@ -74,12 +74,9 @@ def new_account():
     r = myReader.read()
     print(r[1])
     if r[1]==empty_card:
-        try:
-            user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
-            myReader.write(str(user_id))
-            print(user_id)
-        except:
-            print("kein neuer piorist erstellt" + str(sys.exc_info()[0]))
+        user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
+        myReader.write(str(user_id))
+        print(user_id)
 
     # wait for user input
     while True:
