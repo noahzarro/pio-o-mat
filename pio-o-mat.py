@@ -146,7 +146,7 @@ while True:
                 break
         else:
             print("asdf "+menus[current_menu].name)
-            ("MenuFunctions."+globals()[menus[current_menu].function])()
+            globals()["MenuFunctions." + menus[current_menu].function]()
 
 
 
