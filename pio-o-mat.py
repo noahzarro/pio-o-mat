@@ -67,8 +67,19 @@ def new_account():
             break
 
     # check if card is empty
+    myReader = SimpleMFRC522.SimpleMFRC522()
+    r = myReader.read()
 
+    print(r[1])
 
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
