@@ -21,6 +21,7 @@ import Menu
 import GPIO_button
 
 import json
+import requests
 
 # function definitions
 def display_title(title ,draw):
@@ -49,7 +50,13 @@ def draw_menu(device, menu, selection):
 
 
 def new_account():
-    print("gitter, new account")
+    r = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
+    print(r.text)
+    account_data = json.loads(r.text)
+    with canvas(device) as draw:
+        draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
+        draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -102,8 +109,6 @@ try:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
         draw.text((0, 0), "Willkommen zum", fill="white")
         draw.text((0, 8), "Pio-o-Mat", fill="white")
-        draw.text((0, 24), "Press OK for Menu", fill="white")
-        draw.text((0, 32), "Press Pio for Pio", fill="white")
 except:
     print("except")
 time.sleep(1)
@@ -153,7 +158,6 @@ while True:
                 break
         else:
             globals()[menus[current_menu].function]()
-
 
 
 GPIO.cleanup()
