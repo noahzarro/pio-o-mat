@@ -31,7 +31,7 @@ def create_piorist(name, vulgo):
         print(str(i) + "hello1")
         if not i in ids:
             new_piorist = Piorist(i,name,vulgo)
-            piorists.append(new_piorist)
+            piorists.append(new_piorist.to_dict())
             break
         i += 1
 
