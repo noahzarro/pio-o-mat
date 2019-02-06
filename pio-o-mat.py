@@ -112,10 +112,12 @@ while True:
         if 0 < selection:
             selection -= 1
 
-    changed = False
+
     if changed:
         print(len(menus[current_menu].sub))
         if draw_menu(device, menus[current_menu], selection):
             break
+
+    changed = False
 
 GPIO.cleanup()
