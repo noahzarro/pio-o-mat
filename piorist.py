@@ -24,22 +24,16 @@ def create_piorist(name, vulgo):
         for piorist in piorists:
             ids.add(piorist["card_id"])
 
-    print("hello")
-
     i = 1
     while True:
-        print(str(i) + "hello1")
         if not i in ids:
             new_piorist = Piorist(i,name,vulgo)
             piorists.append(new_piorist.to_dict())
             break
         i += 1
 
-    print("hello2")
 
     with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
-
-    print("hello3")
 
     return new_piorist.card_id

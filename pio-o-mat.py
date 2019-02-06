@@ -77,6 +77,13 @@ def new_account():
         user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         myReader.write(str(user_id))
         print(user_id)
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "erfolgreich", fill="white")
+    else:
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "Karte bereits beschrieben", fill="white")
 
     # wait for user input
     while True:
