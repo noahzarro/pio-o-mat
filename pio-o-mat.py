@@ -38,7 +38,7 @@ def draw_menu(device, menu, selection):
                 draw.text((8,title_height+i*8),submenu, fill="white")
                 i += 1
             # draw selection
-            draw.polygon([(1,title_height+selection*8+1),(1,title_height+selection*8+7),(4,title_height+selection*8+4)], fill="white")
+            draw.polygon([(1,title_height+selection*8+2),(1,title_height+selection*8+8),(4,title_height+selection*8+5)], fill="white")
     except:
         print("except")
 
@@ -57,8 +57,8 @@ serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC
 device = sh1106(serial, rotate=2)  # sh1106
 
 # set GPIO pins
-KEY_UP_PIN     = 6
-KEY_DOWN_PIN   = 19
+KEY_UP_PIN     = 19
+KEY_DOWN_PIN   = 6
 OK_PIN       = 21
 BACK_PIN       = 20
 PIO_PIN       = 16
