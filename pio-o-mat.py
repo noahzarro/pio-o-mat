@@ -119,6 +119,7 @@ while True:
             if len(menus[current_menu].sub)-1 > selection:
                 selection += 1
                 changed = True
+                print(selection)
 
     if GPIO.input(KEY_UP_PIN):
         if current_milli_time() > debounce_up + debounce_delay:
@@ -126,10 +127,11 @@ while True:
             if 0 < selection:
                 selection -= 1
                 changed = True
+                print(selection)
 
 
     if changed:
-        print(selection)
+        print("iteration")
         if draw_menu(device, menus[current_menu], selection):
             break
 
