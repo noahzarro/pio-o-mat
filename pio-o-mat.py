@@ -98,15 +98,28 @@ def pio():
         display_title("Pio", draw)
         draw.text((8, title_height), "Karte bitte", fill="white")
 
-    # check id
+    # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
-    r = myReader.read()
-    print(r[1])
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
     try:
-        user_id=int(r[1])
+        user_id=int(read_id)
     except:
         user_id=0
         print("id not valid")
+
+    #
     if user_id!=0:
         response = piorist.pay_pio(user_id,pio_preis)
         with canvas(device) as draw:
@@ -114,7 +127,7 @@ def pio():
             draw.text((8, title_height), response[0], fill="white")
             if not response[1] == None:
                 draw.text((8, title_height + 8), response[1]["vulgo"], fill="white")
-                draw.text((8, title_height + 8), "Kontostand: " + str(response[1]["balance"]) + " Fr.", fill="white")
+                draw.text((8, title_height + 16), "Kontostand: " + str(response[1]["balance"]) + " Fr.", fill="white")
     else:
         with canvas(device) as draw:
             display_title("Pio", draw)
