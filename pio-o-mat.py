@@ -66,6 +66,7 @@ def new_account():
         if button_ok.pressed():
             break
 
+    # check if card is empty
 
 
 
