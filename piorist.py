@@ -14,7 +14,7 @@ class Piorist:
         self.balance = 0.0
 
     def to_dict(self):
-        return dict({"name":self.name,"title":self.vulgo,"back":self.card_id,"sub":self.balance})
+        return dict({"name":self.name,"vulgo":self.vulgo,"card_id":self.card_id,"balance":self.balance})
 
 
 def create_piorist(name, vulgo):
