@@ -459,7 +459,8 @@ def send_money():
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
         draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
-        draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "senden?", fill="white")
+        draw.text((8, title_height + 16), "an "+ user2["vulgo"], fill="white")
+        draw.text((8, title_height + 24), "senden?", fill="white")
 
     # wait for confirmation
     while True:
@@ -474,13 +475,22 @@ def send_money():
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
         draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
-        draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "gesendet", fill="white")
+        draw.text((8, title_height + 16), "an "+ user2["vulgo"], fill="white")
+        draw.text((8, title_height + 16), "gesendet", fill="white")
 
     # update balance
     if not user["card_id"] == master_id:
         piorist.change_balance(user["card_id"],-money_send)
     piorist.change_balance(user2["card_id"],money_send)
 
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
