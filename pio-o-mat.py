@@ -25,6 +25,8 @@ import json
 
 
 def draw_menu(device, menu, selection):
+    print(title_height)
+    print(menu.title)
     try:
         with canvas(device) as draw:
             # clear everything
@@ -35,9 +37,9 @@ def draw_menu(device, menu, selection):
             # draw submenus
             i=0
             for submenu in menu.sub:
-                draw.text((8,title_height+i*8))
+                draw.text((8,title_height+i*8),submenu, fill="white")
             # draw selection
-            draw.polygon([(1,title_height+selection*8+1),(1,title_height+selection*8+7),(4,title_height+selection*8+4)])
+            draw.polygon([(1,title_height+selection*8+1),(1,title_height+selection*8+7),(4,title_height+selection*8+4)], fill="white")
     except:
         print("except")
 
@@ -89,17 +91,7 @@ try:
 except:
     print("except")
 time.sleep(1)
-try:
-    with canvas(device) as draw:
-        # draw.rectangle(device.bounding_box, outline="white", fill="black")
-        draw.text((0, 0), "Willkommen zum", fill="white")
-        draw.text((0, 8), "Pio-o-Mat", fill="white")
-        draw.text((0, 24), "Press OK for Menu", fill="white")
-        draw.text((0, 32), "Press Pio for Pio", fill="white")
-        draw.rectangle([(0,0),(128,64)], fill="black")
-except:
-    print("except")
-time.sleep(1)
+
 # enter main menu
 selection = 0
 draw_menu(device, menus["main"], selection)
