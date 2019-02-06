@@ -1,1 +1,1 @@
-{"name": "account", "title": "Account", "back": "main", "sub": ["info", "send", "entfernen"], "function": ""}
+{"name": "account", "title": "Account", "back": "main", "sub": ["info", "send", "delete"], "function": ""}
