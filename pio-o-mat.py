@@ -19,6 +19,7 @@ import SimpleMFRC522
 import piorist
 import Menu
 import GPIO_button
+import MenuFunctions
 
 import json
 
@@ -42,7 +43,8 @@ def draw_menu(device, menu, selection):
     except:
         print("except")
         return 1
-
+def new_account():
+    print("gitter, new account")
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -80,8 +82,6 @@ button_ok = GPIO_button.GPIO_button("ok",OK_PIN,debounce_delay_buttons)
 button_back = GPIO_button.GPIO_button("back",BACK_PIN,debounce_delay_buttons)
 button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,debounce_delay_buttons)
 
-
-
 # load all menus
 menus = {}
 menu_list = []
@@ -107,6 +107,7 @@ time.sleep(1)
 selection = 0
 current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
+
 
 while True:
 
@@ -143,8 +144,13 @@ while True:
 
     if changed:
         print("iteration")
-        if draw_menu(device, menus[current_menu], selection):
-            break
+        if len(menus[current_menu].sub) != 0: # if there are any submenus, display menu screen, otherwise call function
+            if draw_menu(device, menus[current_menu], selection):
+                break
+            else:
+                print()
+                globals()[menus[current_menu].function]()
+
 
 
 GPIO.cleanup()
