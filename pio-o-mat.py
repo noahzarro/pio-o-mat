@@ -98,6 +98,8 @@ selection = 0
 current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
 
+#gitter
+
 while True:
     changed = False
     if GPIO.input(KEY_DOWN_PIN):
