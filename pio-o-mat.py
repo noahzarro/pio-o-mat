@@ -42,7 +42,7 @@ def draw_menu(device, menu, selection):
             # draw submenus
             i=0
             for submenu in menu.sub:
-                draw.text((8,title_height+i*8),submenu, fill="white")
+                draw.text((8,title_height+i*8),menus[submenu]["title"], fill="white")
                 i += 1
             # draw selection
             draw.polygon([(1,title_height+selection*8+2),(1,title_height+selection*8+8),(4,title_height+selection*8+5)], fill="white")
@@ -186,6 +186,7 @@ button_back = GPIO_button.GPIO_button("back",BACK_PIN,debounce_delay_buttons)
 button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,debounce_delay_buttons)
 
 # load all menus
+# menus = {"name":{dictionary of one menu}}
 menus = {}
 menu_list = []
 with open("Menus/list.menu","r") as list_file:
