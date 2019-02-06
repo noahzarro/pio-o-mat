@@ -6,7 +6,7 @@ r=myReader.read()
 print(type(r[1]))
 print(r[1])
 
-myReader.write(5)
+myReader.write("5")
 
 time.sleep(3)
 
