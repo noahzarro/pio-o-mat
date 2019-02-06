@@ -143,12 +143,11 @@ while True:
             selection = 0
 
     if changed:
-        print("iteration")
         if len(menus[current_menu].sub) != 0: # if there are any submenus, display menu screen, otherwise call function
             if draw_menu(device, menus[current_menu], selection):
                 break
         else:
-            print()
+            print("asdf "+menus[current_menu].name)
             globals()[menus[current_menu].function]()
 
 
