@@ -130,7 +130,7 @@ def pio():
             draw.text((8, title_height), response[0], fill="white")
             if not response[1] == None:
                 draw.text((8, title_height + 8), response[1]["vulgo"], fill="white")
-                draw.text((8, title_height + 16), "Kontostand: " + str(response[1]["balance"]) + " Fr.", fill="white")
+                draw.text((8, title_height + 16), "Kontostand: " + str(response[1]["balance"]/100.0) + " Fr.", fill="white")
     else:
         with canvas(device) as draw:
             display_title("Pio", draw)
@@ -170,7 +170,7 @@ def erase():
     except:
         user_id=0
 
-    # check if user exists, if yes give warning
+    # check if user exists do not delete
     user = piorist.get_piorist(user_id)
     if user is not None:
         with canvas(device) as draw:
@@ -178,13 +178,15 @@ def erase():
             draw.text((8, title_height), "Karte ist", fill="white")
             draw.text((8, title_height + 8), user["name"], fill="white")
             draw.text((8, title_height + 16), "zugeordnet", fill="white")
+            draw.text((8, title_height + 24), "zuerst " + user["name"], fill="white")
+            draw.text((8, title_height + 32), "entfernen", fill="white")
         while True:
             if button_back.pressed():
                 return "back"
             if button_pio.pressed():
                 return "pio"
             if button_ok.pressed():
-                break
+                return "back"
 
     # erase card
     myReader.write(empty_card)
@@ -201,6 +203,131 @@ def erase():
             return "pio"
         if button_ok.pressed():
             return "back"
+
+def delete_account():
+    with canvas(device) as draw:
+        display_title("Benutzer entfernen", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
+    try:
+        user_id=int(read_id)
+    except:
+        user_id=0
+
+    # check if user exists do not delete
+    user = piorist.get_piorist(user_id)
+    if user is not None:
+        if user["balance"] < 0.1:
+            with canvas(device) as draw:
+                display_title("Benutzer entfernen", draw)
+                draw.text((8, title_height), "Kontostand von", fill="white")
+                draw.text((8, title_height + 8), user["vulgo"]+ " ist", fill="white")
+                draw.text((8, title_height + 16), "nicht 0 Fr.", fill="white")
+                draw.text((8, title_height + 24), "zuerst leeren", fill="white")
+
+            # wait for user input
+            while True:
+                if button_back.pressed():
+                    return "back"
+                if button_pio.pressed():
+                    return "pio"
+                if button_ok.pressed():
+                    return "back"
+        else:
+            # erase card
+            myReader.write(empty_card)
+
+            # remove user
+            with canvas(device) as draw:
+                display_title("Benutzer entfernt", draw)
+                draw.text((8, title_height), user["vulgo"], fill="white")
+                draw.text((8, title_height + 8), "wurde entfernt", fill="white")
+                draw.text((8, title_height + 16), "Karte formatiert", fill="white")
+            piorist.delete_piorist(user_id)
+
+            # wait for user input
+            while True:
+                if button_back.pressed():
+                    return "back"
+                if button_pio.pressed():
+                    return "pio"
+                if button_ok.pressed():
+                    return "back"
+    else:
+        with canvas(device) as draw:
+            display_title("Benutzer entfernen", draw)
+            draw.text((8, title_height), "Benutzer nicht", fill="white")
+            draw.text((8, title_height + 8), "gefunden. Karte", fill="white")
+            draw.text((8, title_height + 16), "manuell formatieren", fill="white")
+
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+
+
+def info():
+    with canvas(device) as draw:
+        display_title("Info", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
+    try:
+        user_id=int(read_id)
+    except:
+        user_id=0
+
+    # gets user data
+    user = piorist.get_piorist(user_id)
+    if user is not None:
+        display_title("Info", draw)
+        draw.text((8, title_height), "Vulgo: " + user["vulgo"], fill="white")
+        draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
+        draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
+        draw.text((8, title_height+24), "Statistik: : " + str(user["statistic"]) + " Pio", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -219,7 +346,7 @@ device = sh1106(serial, rotate=2)  # sh1106
 empty_card = "                                                "
 
 # pio preis
-pio_preis = 0.6
+pio_preis = 60
 
 # set GPIO pins
 KEY_UP_PIN     = 6
@@ -325,7 +452,5 @@ while True:
                 current_menu = "main"
                 changed = True
                 selection = 0
-
-
 
 GPIO.cleanup()
