@@ -5,3 +5,4 @@ r=myReader.read()
 
 print(r[1])
 
+myReader.write("")
