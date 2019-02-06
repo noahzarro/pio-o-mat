@@ -146,6 +146,7 @@ while True:
                 break
         else:
             print("asdf "+menus[current_menu].name)
+            MenuFunctions.new_account()
             globals()["MenuFunctions." + menus[current_menu].function]()
 
 
