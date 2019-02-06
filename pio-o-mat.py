@@ -80,7 +80,8 @@ def new_account():
             print("kein neuer piorist erstellt" + sys.exc_info()[0])
         myReader.write(str(user_id))
         print(user_id)
-
+    else:
+        print(r[1])
 
     # wait for user input
     while True:
