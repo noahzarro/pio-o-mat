@@ -87,6 +87,7 @@ try:
         draw.rectangle([(0,0),(128,64)], fill="black")
 except:
     print("except")
+time.sleep(1)
 
 # enter main menu
 selection = 0
