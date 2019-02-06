@@ -112,6 +112,7 @@ debounce_back = current_milli_time()
 
 while True:
 
+    changed = False
     if GPIO.input(KEY_DOWN_PIN):
         if current_milli_time() > debounce_down + debounce_delay:
             debounce_down = current_milli_time()
@@ -132,6 +133,5 @@ while True:
         if draw_menu(device, menus[current_menu], selection):
             break
 
-    changed = False
 
 GPIO.cleanup()
