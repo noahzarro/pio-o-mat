@@ -6,6 +6,8 @@ r=myReader.read()
 
 print(r[1])
 
-myReader.write("")
+to_write = input("Was schriebe?: ")
+
+myReader.write(to_write)
 with open("test","w") as list_file:
     json.dump(r[1],list_file)
