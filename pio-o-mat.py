@@ -22,6 +22,8 @@ import Menu
 import json
 
 # function definitions
+
+
 def draw_menu(device, menu, selection):
     try:
         with canvas(device) as draw:
@@ -38,6 +40,7 @@ def draw_menu(device, menu, selection):
             draw.polygon([(1,title_height+selection*8+1),(1,title_height+selection*8+7),(4,title_height+selection*8+4)])
     except:
         print("except")
+
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -83,12 +86,20 @@ try:
         draw.text((0, 8), "Pio-o-Mat", fill="white")
         draw.text((0, 24), "Press OK for Menu", fill="white")
         draw.text((0, 32), "Press Pio for Pio", fill="white")
-        time.sleep(1)
+except:
+    print("except")
+time.sleep(1)
+try:
+    with canvas(device) as draw:
+        # draw.rectangle(device.bounding_box, outline="white", fill="black")
+        draw.text((0, 0), "Willkommen zum", fill="white")
+        draw.text((0, 8), "Pio-o-Mat", fill="white")
+        draw.text((0, 24), "Press OK for Menu", fill="white")
+        draw.text((0, 32), "Press Pio for Pio", fill="white")
         draw.rectangle([(0,0),(128,64)], fill="black")
 except:
     print("except")
 time.sleep(1)
-
 # enter main menu
 selection = 0
 draw_menu(device, menus["main"], selection)
