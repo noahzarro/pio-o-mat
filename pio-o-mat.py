@@ -111,7 +111,10 @@ def pio():
         response = piorist.pay_pio(user_id,pio_preis)
         with canvas(device) as draw:
             display_title("Pio", draw)
-            draw.text((8, title_height), response, fill="white")
+            draw.text((8, title_height), response[0], fill="white")
+            if not response[1] == None:
+                draw.text((8, title_height + 8), response[1]["vulgo"], fill="white")
+                draw.text((8, title_height + 8), "Kontostand: " + response[1]["balance"] + " Fr.", fill="white")
     else:
         with canvas(device) as draw:
             display_title("Pio", draw)

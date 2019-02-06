@@ -25,14 +25,14 @@ def pay_pio(user_id,pio_preis):
                 piorist["balance"] -= pio_preis
                 with open("list.pio", "w") as write_file:
                     json.dump(piorists, write_file)
-                return "zum Wohl,"
+                return ("zum Wohl",piorist)
             else:
                 with open("list.pio", "w") as write_file:
                     json.dump(piorists, write_file)
-                return "Saldo zu klein"
+                return ("Saldo zu klein",piorist)
     with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
-    return "nicht registriert"
+    return ("nicht registriert",None)
 
 def create_piorist(name, vulgo):
     ids = set()
