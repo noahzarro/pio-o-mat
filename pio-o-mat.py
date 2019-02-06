@@ -18,13 +18,11 @@ import SimpleMFRC522
 
 import piorist
 import Menu
+import GPIO_button
 
 import json
 
 # function definitions
-
-current_milli_time = lambda: int(round(time.time() * 1000))
-
 def draw_menu(device, menu, selection):
     try:
         with canvas(device) as draw:
@@ -73,6 +71,14 @@ GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 
+button_up = GPIO_button.GPIO_button("up",KEY_UP_PIN,200)
+button_down = GPIO_button.GPIO_button("down",KEY_DOWN_PIN,200)
+button_ok = GPIO_button.GPIO_button("ok",OK_PIN,500)
+button_back = GPIO_button.GPIO_button("back",BACK_PIN,500)
+button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,500)
+
+
+
 # load all menus
 menus = {}
 menu_list = []
@@ -100,9 +106,8 @@ current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
 
 # set debounce timers
-
 debounce_delay = 200
-debounce_delay_buttons = 200
+debounce_delay_buttons = 500
 
 debounce_up = current_milli_time()
 debounce_down = current_milli_time()
@@ -114,41 +119,31 @@ debounce_back = current_milli_time()
 while True:
 
     changed = False
-    if not GPIO.input(KEY_DOWN_PIN):
-        if current_milli_time() > debounce_down + debounce_delay:
-            debounce_down = current_milli_time()
-            if len(menus[current_menu].sub)-1 > selection:
-                selection += 1
-                changed = True
-                print("down")
-
-    if not GPIO.input(KEY_UP_PIN):
-        if current_milli_time() > debounce_up + debounce_delay:
-            debounce_up = current_milli_time()
-            if 0 < selection:
-                selection -= 1
-                changed = True
-                print("up")
-
-    if not GPIO.input(OK_PIN):
-        if current_milli_time() > debounce_ok + debounce_delay_buttons:
-            debounce_ok = current_milli_time()
-            print("ok -> " + menus[current_menu].sub[selection])
-            current_menu = menus[current_menu].sub[selection]
+    if button_down.pressed():
+        if len(menus[current_menu].sub)-1 > selection:
+            selection += 1
             changed = True
-            selection = 0
+            print("down")
 
-    if not GPIO.input(BACK_PIN):
-        if current_milli_time() > debounce_back + debounce_delay_buttons:
-            debounce_back = current_milli_time()
+    if button_up.pressed():
+        if 0 < selection:
+            selection -= 1
+            changed = True
+            print("up")
+
+    if button_ok.pressed():
+        print("ok -> " + menus[current_menu].sub[selection])
+        current_menu = menus[current_menu].sub[selection]
+        changed = True
+        selection = 0
+
+    if button_back.pressed():
             print("back -> " + menus[current_menu].back)
             current_menu = menus[current_menu].back
             changed = True
             selection = 0
 
-    if not GPIO.input(PIO_PIN):
-        if current_milli_time() > debounce_pio + debounce_delay_buttons:
-            debounce_pio = current_milli_time()
+    if button_pio.pressed():
             current_menu = "pio"
             changed = True
             print("ok -> pio")
