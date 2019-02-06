@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 
 import time
 import subprocess
+import SimpleMFRC522
 
 from PIL import Image
 from PIL import ImageDraw
