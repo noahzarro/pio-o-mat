@@ -39,8 +39,10 @@ def draw_menu(device, menu, selection):
                 i += 1
             # draw selection
             draw.polygon([(1,title_height+selection*8+2),(1,title_height+selection*8+8),(4,title_height+selection*8+5)], fill="white")
+            return 0
     except:
         print("except")
+        return 1
 
 
 # setup RFID-Device
@@ -109,6 +111,8 @@ while True:
             selection -= 1
 
     if changed:
-        draw_menu(device, menus[current_menu], selection)
+        print(len(menus[current_menu].sub))
+        if draw_menu(device, menus[current_menu], selection):
+            break
 
 GPIO.cleanup()
