@@ -42,7 +42,8 @@ def draw_menu(device, menu, selection):
             # draw submenus
             i=0
             for submenu in menu.sub:
-                print(menus)
+                print(submenu)
+                print(menus[submenu])
                 draw.text((8,title_height+i*8),menus[submenu]["title"], fill="white")
                 i += 1
             # draw selection
