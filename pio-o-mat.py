@@ -396,7 +396,7 @@ def send_money():
                     display_title("Geld senden", draw)
                     draw.text((8, title_height), user["vulgo"], fill="white")
                     draw.text((8, title_height + 8), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
-                    draw.text((8, title_height + 16), "senden: " + str(money_send)/100.0 + " Fr.", fill="white")
+                    draw.text((8, title_height + 16), "senden: " + str(money_send/100.0) + " Fr.", fill="white")
     else:
         with canvas(device) as draw:
             display_title("Geld senden", draw)
@@ -455,7 +455,7 @@ def send_money():
     with canvas(device) as draw:
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
-        draw.text((8, title_height + 8), str(money_send) / 100.0 + " Fr.", fill="white")
+        draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
         draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "senden?", fill="white")
 
     # wait for confirmation
@@ -470,7 +470,7 @@ def send_money():
     with canvas(device) as draw:
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
-        draw.text((8, title_height + 8), str(money_send) / 100.0 + " Fr.", fill="white")
+        draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
         draw.text((8, title_height + 16), "an "+ user2["vulgo"] + "gesendet", fill="white")
 
     # update balance
