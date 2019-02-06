@@ -64,6 +64,9 @@ OK_PIN       = 21
 BACK_PIN       = 20
 PIO_PIN       = 16
 
+debounce_delay = 200
+debounce_delay_buttons = 500
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(KEY_UP_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Input with pull-up
 GPIO.setup(KEY_DOWN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-up
@@ -71,11 +74,11 @@ GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 
-button_up = GPIO_button.GPIO_button("up",KEY_UP_PIN,200)
-button_down = GPIO_button.GPIO_button("down",KEY_DOWN_PIN,200)
-button_ok = GPIO_button.GPIO_button("ok",OK_PIN,500)
-button_back = GPIO_button.GPIO_button("back",BACK_PIN,500)
-button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,500)
+button_up = GPIO_button.GPIO_button("up",KEY_UP_PIN,debounce_delay)
+button_down = GPIO_button.GPIO_button("down",KEY_DOWN_PIN,debounce_delay)
+button_ok = GPIO_button.GPIO_button("ok",OK_PIN,debounce_delay_buttons)
+button_back = GPIO_button.GPIO_button("back",BACK_PIN,debounce_delay_buttons)
+button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,debounce_delay_buttons)
 
 
 
@@ -104,17 +107,6 @@ time.sleep(1)
 selection = 0
 current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
-
-# set debounce timers
-debounce_delay = 200
-debounce_delay_buttons = 500
-
-debounce_up = current_milli_time()
-debounce_down = current_milli_time()
-debounce_pio = current_milli_time()
-debounce_ok = current_milli_time()
-debounce_back = current_milli_time()
-
 
 while True:
 
