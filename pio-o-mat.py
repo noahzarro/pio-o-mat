@@ -102,6 +102,7 @@ draw_menu(device, menus[current_menu], selection)
 # set debounce timers
 
 debounce_delay = 200
+debounce_delay_buttons = 500
 
 debounce_up = current_milli_time()
 debounce_down = current_milli_time()
@@ -130,7 +131,7 @@ while True:
                 print("up")
 
     if not GPIO.input(OK_PIN):
-        if current_milli_time() > debounce_ok + debounce_delay:
+        if current_milli_time() > debounce_ok + debounce_delay_buttons:
             debounce_ok = current_milli_time()
             current_menu = menus[current_menu].sub[selection]
             changed = True
@@ -138,7 +139,7 @@ while True:
             selection = 0
 
     if not GPIO.input(BACK_PIN):
-        if current_milli_time() > debounce_back + debounce_delay:
+        if current_milli_time() > debounce_back + debounce_delay_buttons:
             debounce_back = current_milli_time()
             current_menu = menus[current_menu].back
             changed = True
@@ -146,7 +147,7 @@ while True:
             selection = 0
 
     if not GPIO.input(PIO_PIN):
-        if current_milli_time() > debounce_pio + debounce_delay:
+        if current_milli_time() > debounce_pio + debounce_delay_buttons:
             debounce_pio = current_milli_time()
             current_menu = "pio"
             changed = True
