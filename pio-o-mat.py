@@ -101,7 +101,7 @@ draw_menu(device, menus[current_menu], selection)
 #gitter
 
 while True:
-    changed = False
+
     if GPIO.input(KEY_DOWN_PIN):
         changed = True
         if len(menus[current_menu].sub) > selection:
@@ -112,6 +112,7 @@ while True:
         if 0 < selection:
             selection -= 1
 
+    changed = False
     if changed:
         print(len(menus[current_menu].sub))
         if draw_menu(device, menus[current_menu], selection):
