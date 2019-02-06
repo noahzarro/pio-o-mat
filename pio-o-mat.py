@@ -19,19 +19,22 @@ import SimpleMFRC522
 import piorist
 import Menu
 import GPIO_button
-import MenuFunctions
 
 import json
 
 # function definitions
+def display_title(title ,draw):
+    draw.rectangle([(0, 0), (128, title_height)], fill="white")
+    draw.text((1, 1), title, fill="black")
+
+
 def draw_menu(device, menu, selection):
     try:
         with canvas(device) as draw:
             # clear everything
             draw.rectangle([(0, 0), (128, 64)], fill="black")
-            # draw titlebox
-            draw.rectangle([(0, 0), (128, title_height)], fill="white")
-            draw.text((1, 1), menu.title, fill="black")
+            # draw title
+            display_title(menu.title, draw)
             # draw submenus
             i=0
             for submenu in menu.sub:
@@ -43,6 +46,10 @@ def draw_menu(device, menu, selection):
     except:
         print("except")
         return 1
+
+
+def new_account():
+    print("gitter, new account")
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
@@ -145,9 +152,7 @@ while True:
             if draw_menu(device, menus[current_menu], selection):
                 break
         else:
-            print("asdf "+menus[current_menu].name)
-            MenuFunctions.new_account()
-            globals()["MenuFunctions." + menus[current_menu].function]()
+            globals()[menus[current_menu].function]()
 
 
 
