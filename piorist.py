@@ -19,7 +19,7 @@ class Piorist:
 
 def create_piorist(name, vulgo):
     ids = set()
-    with open("Piorists/list.pio", "r") as read_file:
+    with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
         for piorist in piorists:
             ids.add(piorist["card_id"])
@@ -31,7 +31,7 @@ def create_piorist(name, vulgo):
             new_piorist = Piorist(i,name,vulgo)
             piorists.add(new_piorist)
 
-    with open("Piorists/list.pio", "w") as write_file:
+    with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
 
     return new_piorist.card_id
