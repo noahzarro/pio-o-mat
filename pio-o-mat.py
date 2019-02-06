@@ -314,11 +314,18 @@ def info():
     # gets user data
     user = piorist.get_piorist(user_id)
     if user is not None:
-        display_title("Info", draw)
-        draw.text((8, title_height), "Vulgo: " + user["vulgo"], fill="white")
-        draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
-        draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
-        draw.text((8, title_height+24), "Statistik: : " + str(user["statistic"]) + " Pio", fill="white")
+        with canvas(device) as draw:
+            display_title("Info", draw)
+            draw.text((8, title_height), "Vulgo: " + user["vulgo"], fill="white")
+            draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
+            draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
+            draw.text((8, title_height+24), "Statistik: : " + str(user["statistic"]) + " Pio", fill="white")
+
+    else:
+        with canvas(device) as draw:
+            display_title("Info", draw)
+            draw.text((8, title_height), "Benutzer nicht", fill="white")
+            draw.text((8, title_height + 8), "gefunden", fill="white")
 
     # wait for user input
     while True:
