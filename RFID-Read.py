@@ -6,4 +6,4 @@ r=myReader.read()
 
 print(r[1])
 print("length: "+ str(len(r[1])))
-print(type(r[r]))
+print(type(r[1]))
