@@ -275,6 +275,7 @@ def delete_account():
             draw.text((8, title_height + 8), "gefunden. Karte", fill="white")
             draw.text((8, title_height + 16), "manuell formatieren", fill="white")
 
+        # wait for user input
         while True:
             if button_back.pressed():
                 return "back"
