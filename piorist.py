@@ -16,6 +16,15 @@ class Piorist:
     def to_dict(self):
         return dict({"name":self.name,"vulgo":self.vulgo,"card_id":self.card_id,"balance":self.balance})
 
+def get_piorist(user_id):
+    response = None
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        if int(piorist["card_id"]) == user_id:
+            response=piorist
+    return response
+
 def pay_pio(user_id,pio_preis):
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)

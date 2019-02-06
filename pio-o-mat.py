@@ -80,11 +80,12 @@ def new_account():
         myReader.write(str(user_id))
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
-            draw.text((8, title_height), "erfolgreich", fill="white")
+            draw.text((8, title_height), "erfolgreich!", fill="white")
     else:
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
-            draw.text((8, title_height), "Karte bereits beschrieben", fill="white")
+            draw.text((8, title_height), "Karte bereits", fill="white")
+            draw.text((8, title_height+8), "beschrieben", fill="white")
 
     # wait for user input
     while True:
@@ -144,6 +145,62 @@ def pio():
         if button_ok.pressed():
             return "back"
 
+def erase():
+    with canvas(device) as draw:
+        display_title("Karte formatieren", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
+    # read until id got or cancelled
+    id, read_id = myReader.read_no_block()
+    while not id:
+        id, read_id = myReader.read_no_block()
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+
+    print(read_id)
+
+    # check whether id is valid
+    try:
+        user_id=int(read_id)
+    except:
+        user_id=0
+
+    # check if user exists, if yes give warning
+    user = piorist.get_piorist(user_id)
+    if user is not None:
+        with canvas(device) as draw:
+            display_title("Achtung!", draw)
+            draw.text((8, title_height), "Karte ist", fill="white")
+            draw.text((8, title_height + 8), user["name"], fill="white")
+            draw.text((8, title_height + 16), "zugeordnet", fill="white")
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                break
+
+    # erase card
+    myReader.write(empty_card)
+
+    # wait for user input
+    with canvas(device) as draw:
+        display_title("Karte Formatieren", draw)
+        draw.text((8, title_height), "Karte formatiert", fill="white")
+
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
