@@ -76,7 +76,6 @@ def new_account():
     if r[1]==empty_card:
         user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         myReader.write(str(user_id))
-        print(user_id)
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
             draw.text((8, title_height), "erfolgreich", fill="white")
@@ -94,6 +93,46 @@ def new_account():
         if button_ok.pressed():
             return "back"
 
+def pio():
+    with canvas(device) as draw:
+        display_title("Pio", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    # check id
+    myReader = SimpleMFRC522.SimpleMFRC522()
+    r = myReader.read()
+    try:
+        user_id=int(r[1])
+    except:
+        user_id=0
+    if user_id!=0:
+        response = piorist.pay_pio(user_id,pio_preis)
+        display_title("Pio", draw)
+        draw.text((8, title_height), response, fill="white")
+    else:
+        with canvas(device) as draw:
+            display_title("Pio", draw)
+            draw.text((8, title_height), "Benutzer unbekannt", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
@@ -109,6 +148,9 @@ device = sh1106(serial, rotate=2)  # sh1106
 
 # empty card
 empty_card = "                                                "
+
+# pio preis
+pio_preis = 0.6
 
 # set GPIO pins
 KEY_UP_PIN     = 6
