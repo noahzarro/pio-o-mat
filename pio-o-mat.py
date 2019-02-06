@@ -51,11 +51,22 @@ def draw_menu(device, menu, selection):
 
 def new_account():
     r = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
-    print(r.text)
     account_data = json.loads(r.text)
     with canvas(device) as draw:
+        display_title("Neuer Account", draw)
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
         draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+
 
 
 # setup RFID-Device
@@ -117,11 +128,11 @@ time.sleep(1)
 selection = 0
 current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
-
+changed = False
 
 while True:
 
-    changed = False
+
     if button_down.pressed():
         if len(menus[current_menu].sub)-1 > selection:
             selection += 1
@@ -153,11 +164,28 @@ while True:
             selection = 0
 
     if changed:
+        changed = False
         if len(menus[current_menu].sub) != 0: # if there are any submenus, display menu screen, otherwise call function
             if draw_menu(device, menus[current_menu], selection):
                 break
         else:
-            globals()[menus[current_menu].function]()
+            response = globals()[menus[current_menu].function]()
+            if response == "pio":
+                current_menu = "pio"
+                changed = True
+                print("? -> pio")
+                selection = 0
+            elif response == "back":
+                print("back -> " + menus[current_menu].back)
+                current_menu = menus[current_menu].back
+                changed = True
+                selection = 0
+            else:
+                print("no valid response")
+                current_menu = "main"
+                changed = True
+                selection = 0
+
 
 
 GPIO.cleanup()
