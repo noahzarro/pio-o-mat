@@ -509,7 +509,7 @@ device = sh1106(serial, rotate=2)  # sh1106
 empty_card = "                                                "
 
 # master_id
-master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
+master_id =  "                                             pio"
 
 # pio preis
 pio_preis = 60
