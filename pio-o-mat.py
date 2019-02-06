@@ -60,8 +60,8 @@ serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC
 device = sh1106(serial, rotate=2)  # sh1106
 
 # set GPIO pins
-KEY_UP_PIN     = 19
-KEY_DOWN_PIN   = 6
+KEY_UP_PIN     = 6
+KEY_DOWN_PIN   = 19
 OK_PIN       = 21
 BACK_PIN       = 20
 PIO_PIN       = 16
