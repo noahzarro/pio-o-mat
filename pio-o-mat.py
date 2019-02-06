@@ -23,6 +23,7 @@ import json
 
 # function definitions
 
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 def draw_menu(device, menu, selection):
     try:
@@ -98,23 +99,36 @@ selection = 0
 current_menu = "main"
 draw_menu(device, menus[current_menu], selection)
 
-#gitter
+# set debounce timers
+
+debounce_delay = 200
+
+debounce_up = current_milli_time()
+debounce_down = current_milli_time()
+debounce_pio = current_milli_time()
+debounce_ok = current_milli_time()
+debounce_back = current_milli_time()
+
 
 while True:
 
     if GPIO.input(KEY_DOWN_PIN):
-        changed = True
-        if len(menus[current_menu].sub) > selection:
-            selection += 1
+        if current_milli_time() > debounce_down + debounce_delay:
+            debounce_down = current_milli_time()
+            if len(menus[current_menu].sub)-1 > selection:
+                selection += 1
+                changed = True
 
     if GPIO.input(KEY_UP_PIN):
-        changed = True
-        if 0 < selection:
-            selection -= 1
+        if current_milli_time() > debounce_up + debounce_delay:
+            debounce_up = current_milli_time()
+            if 0 < selection:
+                selection -= 1
+                changed = True
 
 
     if changed:
-        print(len(menus[current_menu].sub))
+        print(selection)
         if draw_menu(device, menus[current_menu], selection):
             break
 
