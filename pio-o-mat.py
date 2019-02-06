@@ -51,8 +51,8 @@ def draw_menu(device, menu, selection):
 
 
 def new_account():
-    r = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
-    account_data = json.loads(r.text)
+    request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
+    account_data = json.loads(request.text)
     with canvas(device) as draw:
         display_title("Neuer Account", draw)
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
@@ -70,8 +70,11 @@ def new_account():
     # check if card is empty
     myReader = SimpleMFRC522.SimpleMFRC522()
     r = myReader.read()
-
     print(r[1])
+    if r[1]=="":
+        user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
+        myReader.write(str(user_id))
+
 
     # wait for user input
     while True:
