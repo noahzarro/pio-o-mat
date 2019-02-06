@@ -95,9 +95,22 @@ time.sleep(1)
 
 # enter main menu
 selection = 0
-draw_menu(device, menus["main"], selection)
+current_menu = "main"
+draw_menu(device, menus[current_menu], selection)
 
-#while True:
+while True:
+    changed = False
+    if GPIO.input(KEY_DOWN_PIN):
+        changed = True
+        if len(menu_list[current_menu].sub) > selection:
+            selection += 1
 
+    if GPIO.input(KEY_UP_PIN):
+        changed = True
+        if 0 < selection:
+            selection -= 1
+
+    if changed:
+        draw_menu(device, menus[current_menu], selection)
 
 GPIO.cleanup()
