@@ -17,6 +17,8 @@ from PIL import ImageFont
 
 import SimpleMFRC522
 
+import sys
+
 import piorist
 import Menu
 import GPIO_button
@@ -72,7 +74,10 @@ def new_account():
     r = myReader.read()
     print(r[1])
     if r[1]=="":
-        user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
+        try:
+            user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
+        except:
+            print("kein neuer piorist erstellt" + sys.exc_info()[0])
         myReader.write(str(user_id))
         print(user_id)
 

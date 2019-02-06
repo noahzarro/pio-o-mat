@@ -26,10 +26,12 @@ def create_piorist(name, vulgo):
 
     i = 1
     while True:
-        i += 1
-        if not ids.__contains__(i):
+        print(str(i) + "hello")
+        if not i in ids:
             new_piorist = Piorist(i,name,vulgo)
             piorists.add(new_piorist)
+            break
+        i += 1
 
     with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
