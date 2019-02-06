@@ -34,6 +34,7 @@ def pay_pio(user_id,pio_preis):
         if int(piorist["card_id"])==user_id:
             if piorist["balance"] >= pio_preis:
                 piorist["balance"] -= pio_preis
+                piorist["statistic"] += 1
                 with open("list.pio", "w") as write_file:
                     json.dump(piorists, write_file)
                 return ("zum Wohl",piorist)

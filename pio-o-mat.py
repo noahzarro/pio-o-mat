@@ -97,7 +97,8 @@ def new_account():
 def pio():
     with canvas(device) as draw:
         display_title("Pio", draw)
-        draw.text((8, title_height), "Karte bitte", fill="white")
+        draw.text((8, title_height), "Pio Bestellung", fill="white")
+        draw.text((8, title_height+8), "Karte bitte", fill="white")
 
     # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
@@ -476,7 +477,7 @@ def send_money():
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
         draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
         draw.text((8, title_height + 16), "an "+ user2["vulgo"], fill="white")
-        draw.text((8, title_height + 16), "gesendet", fill="white")
+        draw.text((8, title_height + 24), "gesendet", fill="white")
 
     # update balance
     if not user["card_id"] == master_id:
