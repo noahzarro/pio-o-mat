@@ -119,7 +119,7 @@ while True:
             if len(menus[current_menu].sub)-1 > selection:
                 selection += 1
                 changed = True
-                print(selection)
+                print("down")
 
     if not GPIO.input(KEY_UP_PIN):
         if current_milli_time() > debounce_up + debounce_delay:
@@ -127,8 +127,31 @@ while True:
             if 0 < selection:
                 selection -= 1
                 changed = True
-                print(selection)
+                print("up")
 
+    if not GPIO.input(OK_PIN):
+        if current_milli_time() > debounce_ok + debounce_delay:
+            debounce_ok = current_milli_time()
+            current_menu = menus[current_menu].sub[selection]
+            changed = True
+            print("ok -> " + menus[current_menu].sub[selection])
+            selection = 0
+
+    if not GPIO.input(BACK_PIN):
+        if current_milli_time() > debounce_back + debounce_delay:
+            debounce_back = current_milli_time()
+            current_menu = menus[current_menu].back
+            changed = True
+            print("back -> " + menus[current_menu].back)
+            selection = 0
+
+    if not GPIO.input(PIO_PIN):
+        if current_milli_time() > debounce_pio + debounce_delay:
+            debounce_pio = current_milli_time()
+            current_menu = "pio"
+            changed = True
+            print("ok -> pio")
+            selection = 0
 
     if changed:
         print("iteration")
