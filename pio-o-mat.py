@@ -73,15 +73,13 @@ def new_account():
     myReader = SimpleMFRC522.SimpleMFRC522()
     r = myReader.read()
     print(r[1])
-    if r[1]=="":
+    if len(r[1])==0:
         try:
             user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         except:
             print("kein neuer piorist erstellt" + sys.exc_info()[0])
         myReader.write(str(user_id))
         print(user_id)
-    else:
-        print(r[1])
 
     # wait for user input
     while True:
