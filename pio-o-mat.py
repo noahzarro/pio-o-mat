@@ -92,7 +92,7 @@ except:
 selection = 0
 draw_menu(device, menus["main"], selection)
 
-while True:
+#while True:
 
 
 GPIO.cleanup()
