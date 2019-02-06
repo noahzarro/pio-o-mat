@@ -113,7 +113,7 @@ debounce_back = current_milli_time()
 while True:
 
     changed = False
-    if GPIO.input(KEY_DOWN_PIN):
+    if not GPIO.input(KEY_DOWN_PIN):
         if current_milli_time() > debounce_down + debounce_delay:
             debounce_down = current_milli_time()
             if len(menus[current_menu].sub)-1 > selection:
@@ -121,7 +121,7 @@ while True:
                 changed = True
                 print(selection)
 
-    if GPIO.input(KEY_UP_PIN):
+    if not GPIO.input(KEY_UP_PIN):
         if current_milli_time() > debounce_up + debounce_delay:
             debounce_up = current_milli_time()
             if 0 < selection:
