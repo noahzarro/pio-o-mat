@@ -43,8 +43,6 @@ def draw_menu(device, menu, selection):
     except:
         print("except")
         return 1
-def new_account():
-    print("gitter, new account")
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
