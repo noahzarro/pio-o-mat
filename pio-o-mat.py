@@ -417,6 +417,9 @@ def send_money():
         draw.text((8, title_height), "Zweite", fill="white")
         draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
     # read until id got or cancelled
     id, read_id = myReader.read_no_block()
     while not id:
