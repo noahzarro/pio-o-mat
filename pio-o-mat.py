@@ -19,6 +19,26 @@ import SimpleMFRC522
 import piorist
 import Menu
 
+import json
+
+# function definitions
+def draw_menu(device, menu, selection):
+    try:
+        with canvas(device) as draw:
+            # clear everything
+            draw.rectangle([(0, 0), (128, 64)], fill="black")
+            # draw titlebox
+            draw.rectangle([(0, 0), (128, title_height)], fill="white")
+            draw.text((1, 1), menu.title, fill="black")
+            # draw submenus
+            i=0
+            for submenu in menu.sub:
+                draw.text((8,title_height+i*8))
+            # draw selection
+            draw.polygon([(1,title_height+selection*8+1),(1,title_height+selection*8+7),(4,title_height+selection*8+4)])
+    except:
+        print("except")
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
@@ -26,6 +46,7 @@ card_reader = SimpleMFRC522.SimpleMFRC522()
 width = 128
 height = 64
 image = Image.new('1', (width, height))
+title_height = 10
 
 # initialize device
 serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
@@ -45,8 +66,15 @@ GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 
-# load all Menus
-
+# load all menus
+menus = {}
+menu_list = []
+with open("Menus/list.menu","r") as list_file:
+    menu_list = json.load(list_file)
+    for menu_name in menu_list:
+        with open("Menus/" + menu_name + ".json", "r") as menu_file:
+            menu_dict = json.load(menu_file)
+            menus[menu_dict["name"]] = Menu.Menu(menu_dict)
 
 try:
     with canvas(device) as draw:
@@ -59,5 +87,12 @@ try:
         draw.rectangle([(0,0),(128,64)], fill="black")
 except:
     print("except")
+
+# enter main menu
+selection = 0
+draw_menu(device, menus["main"], selection)
+
+while True:
+
 
 GPIO.cleanup()

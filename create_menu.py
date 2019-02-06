@@ -30,4 +30,16 @@ if not new_menu.sub:
 else:
     new_menu.function = ""
 
-print(new_menu)
+# save menu
+with open("Menus/"+new_menu.name+".json", "w") as write_file:
+    dict_menu = new_menu.to_dict()
+    json.dump(dict_menu,write_file)
+
+# update menu list
+menu_list = []
+with open("Menus/list.menu","r") as read_file:
+    menu_list = json.load(read_file)
+
+menu_list.append(new_menu.name)
+with open("Menus/list.menu","w") as write_file:
+    json.dump(menu_list,write_file)
