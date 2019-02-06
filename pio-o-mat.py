@@ -102,7 +102,7 @@ while True:
     changed = False
     if GPIO.input(KEY_DOWN_PIN):
         changed = True
-        if len(menu_list[current_menu].sub) > selection:
+        if len(menus[current_menu].sub) > selection:
             selection += 1
 
     if GPIO.input(KEY_UP_PIN):
