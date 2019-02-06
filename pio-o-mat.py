@@ -44,7 +44,7 @@ def draw_menu(device, menu, selection):
             for submenu in menu.sub:
                 print(submenu)
                 print(menus[submenu])
-                draw.text((8,title_height+i*8),menus[submenu]["title"], fill="white")
+                draw.text((8,title_height+i*8),menus[submenu].title, fill="white")
                 i += 1
             # draw selection
             draw.polygon([(1,title_height+selection*8+2),(1,title_height+selection*8+8),(4,title_height+selection*8+5)], fill="white")
