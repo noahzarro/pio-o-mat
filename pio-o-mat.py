@@ -73,7 +73,7 @@ def new_account():
     myReader = SimpleMFRC522.SimpleMFRC522()
     r = myReader.read()
     print(r[1])
-    if len(r[1])==0:
+    if r[1]==empty_card:
         try:
             user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
         except:
@@ -102,6 +102,9 @@ title_height = 10
 # initialize device
 serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
 device = sh1106(serial, rotate=2)  # sh1106
+
+# empty card
+empty_card = "                                                "
 
 # set GPIO pins
 KEY_UP_PIN     = 6
