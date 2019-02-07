@@ -493,6 +493,23 @@ def send_money():
         if button_ok.pressed():
             return "back"
 
+def settings_exit():
+    with canvas(device) as draw:
+        display_title("Beenden", draw)
+        draw.text((8, title_height), "wirklich beenden?", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    GPIO.cleanup()
+    exit()
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
