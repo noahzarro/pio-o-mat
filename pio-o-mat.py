@@ -51,6 +51,46 @@ def draw_menu(device, menu, selection):
         print("except")
         return 1
 
+def backup():
+
+    url = "http://people.ee.ethz.ch/~zarron/backup.php"
+
+    with open("list.pio", "r") as read_file:
+        payload_string = json.dumps(json.load(read_file))
+
+    payload = {"load": payload_string}
+
+    r = requests.post(url, data=payload)
+
+    try:
+        request = requests.get('http://people.ee.ethz.ch/~zarron/backup.php')
+    except:
+        with canvas(device) as draw:
+            display_title("Backup", draw)
+            draw.text((8, title_height), "Keine Verbindung", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    with canvas(device) as draw:
+        display_title("Backup", draw)
+        draw.text((8, title_height), "Backup erstellt", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
 
 def new_account():
     try:
@@ -563,7 +603,7 @@ def new_connection():
             break
 
     with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as file_write:
-        file_write.write("\nnetwork={\n   ssid=\"" + connection_data["ssid"] + "\"\n   psk=\"" + connection_data["passwort"] + "\"\n}")
+        file_write.write("\nnetwork={\n   ssid=\"" + connection_data["ssid"] + "\"\n   psk=\"" + connection_data["passwort"] + "\"\n}\n")
 
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)

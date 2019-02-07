@@ -1,1 +1,1 @@
-{"name": "settings", "title": "Einstellungen", "back": "main", "sub": ["erase", "exit", "new_connection"], "function": ""}
+{"name": "settings", "title": "Einstellungen", "back": "main", "sub": ["erase", "exit", "new_connection","backup"], "function": ""}
