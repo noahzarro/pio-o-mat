@@ -565,6 +565,20 @@ def new_connection():
     with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as file_write:
         file_write.write("\r\nnetwork={\r\n   ssid=" + connection_data["ssid"] + "\r\n   psk=" + connection_data["passwort"] + "\r\n}")
 
+    with canvas(device) as draw:
+        display_title("Neue Verbindung", draw)
+        draw.text((8, title_height), "Verbindung", fill="white")
+        draw.text((8, title_height), "gespeichert", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
