@@ -4,3 +4,7 @@ gitterinenetwork={
    ssid=niki
    psk=1234
 }
+network={
+   ssid"=niki"
+   psk="1234"
+}

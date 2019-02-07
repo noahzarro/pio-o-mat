@@ -563,7 +563,7 @@ def new_connection():
             break
 
     with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as file_write:
-        file_write.write("\r\nnetwork={\r\n   ssid=" + connection_data["ssid"] + "\r\n   psk=" + connection_data["passwort"] + "\r\n}")
+        file_write.write("\r\nnetwork={\r\n   ssid=\"" + connection_data["ssid"] + "\"\r\n   psk=\"" + connection_data["passwort"] + "\"\r\n}")
 
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)
