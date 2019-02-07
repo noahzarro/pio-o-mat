@@ -53,7 +53,22 @@ def draw_menu(device, menu, selection):
 
 
 def new_account():
-    request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
+    try:
+        request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
+    except:
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "Keine Verbindung", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
     account_data = json.loads(request.text)
     with canvas(device) as draw:
         display_title("Neuer Account", draw)
@@ -506,9 +521,49 @@ def settings_exit():
             return "pio"
         if button_ok.pressed():
             break
+    # say pussys von p to y
+    with canvas(device) as draw:
+        display_title("Beenden", draw)
+        draw.text((8, title_height), "Pussys vom", fill="white")
+        draw.text((8, title_height + 8), "P bis zum Y", fill="white")
 
     GPIO.cleanup()
     exit()
+
+def new_connection():
+    try:
+        request = requests.get('http://people.ee.ethz.ch/~zarron/wlanAPI.php')
+    except:
+        with canvas(device) as draw:
+            display_title("Neue Verbindung", draw)
+            draw.text((8, title_height), "Keine Verbindung", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    connection_data = json.loads(request.text)
+    with canvas(device) as draw:
+        display_title("Neue Verbindung", draw)
+        draw.text((8, title_height), "SSID: " + connection_data["ssid"], fill="white")
+        draw.text((8, title_height + 8), "Passwort: " + connection_data["passwort"], fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as file_write:
+        file_write.write("\r\nnetwork={\r\n   ssid=" + connection_data["ssid"] + "\r\n   psk=" + connection_data["passwort"] + "\r\n}")
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()

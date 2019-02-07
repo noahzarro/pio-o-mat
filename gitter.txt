@@ -1,0 +1,6 @@
+herr
+Lehmann
+gitterinenetwork={
+   ssid=niki
+   psk=1234
+}
