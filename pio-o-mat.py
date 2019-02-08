@@ -51,6 +51,7 @@ def draw_menu(device, menu, selection):
         print("except")
         return 1
 
+
 def backup():
 
     url = "http://people.ee.ethz.ch/~zarron/backup.php"
@@ -561,6 +562,10 @@ def settings_exit():
             return "pio"
         if button_ok.pressed():
             break
+
+    # do backup
+    backup()
+
     # say pussys von p to y
     with canvas(device) as draw:
         display_title("Beenden", draw)
@@ -602,8 +607,21 @@ def new_connection():
         if button_ok.pressed():
             break
 
-    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as file_write:
-        file_write.write("\nnetwork={\n   ssid=\"" + connection_data["ssid"] + "\"\n   psk=\"" + connection_data["passwort"] + "\"\n}\n")
+    with open("wlan.pio", "r") as file_read:
+        wlans = json.load(file_read)
+    for wlan in wlans:
+        if wlan["ssid"] == connection_data["ssid"]:
+            wlans.remove(wlan)
+
+    wlans.add({"ssid":connection_data["ssid"], "passwort":connection_data["passwort"]})
+
+    with open("wlan.pio", "w") as file_write:
+        json.dump(wlans,file_write)
+
+    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as file_write:
+        file_write.write("country=CH\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\n")
+        for wlan in wlans:
+            file_write.write("network={\n   ssid=\"" + connection_data["ssid"] + "\"\n   psk=\"" + connection_data["passwort"] + "\"\n    key_mgmt=WPA-PSK\n    id_str=\"" + connection_data["ssid"] + "\"\n}\n")
 
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)
