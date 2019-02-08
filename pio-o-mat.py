@@ -649,7 +649,7 @@ empty_card = "                                                "
 # master_id
 master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
-# pio preis
+# pio preis in Rappen
 pio_preis = 60
 
 # set GPIO pins
