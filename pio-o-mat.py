@@ -14,7 +14,7 @@ import SimpleMFRC522
 
 import piorist
 import Menu
-from Test import GPIO_button
+import GPIO_button
 
 import json
 import requests
