@@ -1,27 +1,20 @@
 # pio-o-mat, for managing beer consumption at serafins ruemli
 
-from luma.core.interface.serial import i2c, spi
+from luma.core.interface.serial import spi
 from luma.core.render import canvas
-from luma.core import lib
 
 from luma.oled.device import sh1106
 import RPi.GPIO as GPIO
 
 import time
-import subprocess
-import SimpleMFRC522
 
 from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
 
 import SimpleMFRC522
-
-import sys
 
 import piorist
 import Menu
-import GPIO_button
+from Test import GPIO_button
 
 import json
 import requests
@@ -676,11 +669,11 @@ GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 
-button_up = GPIO_button.GPIO_button("up",KEY_UP_PIN,debounce_delay)
-button_down = GPIO_button.GPIO_button("down",KEY_DOWN_PIN,debounce_delay)
-button_ok = GPIO_button.GPIO_button("ok",OK_PIN,debounce_delay_buttons)
-button_back = GPIO_button.GPIO_button("back",BACK_PIN,debounce_delay_buttons)
-button_pio = GPIO_button.GPIO_button("pio",PIO_PIN,debounce_delay_buttons)
+button_up = GPIO_button.GPIO_button("up", KEY_UP_PIN, debounce_delay)
+button_down = GPIO_button.GPIO_button("down", KEY_DOWN_PIN, debounce_delay)
+button_ok = GPIO_button.GPIO_button("ok", OK_PIN, debounce_delay_buttons)
+button_back = GPIO_button.GPIO_button("back", BACK_PIN, debounce_delay_buttons)
+button_pio = GPIO_button.GPIO_button("pio", PIO_PIN, debounce_delay_buttons)
 
 # load all menus
 # menus = {"name":{dictionary of one menu}}
