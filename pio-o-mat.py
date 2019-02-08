@@ -630,6 +630,32 @@ def new_connection():
         if button_ok.pressed():
             return "back"
 
+def record():
+    vulgo = "Niemand"
+    pios = 0
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        if int(piorist["statistic"]) > pios:
+            pios = piorist["statistic"]
+            vulgo = piorist["vulgo"]
+
+    with canvas(device) as draw:
+        display_title("Rekord", draw)
+        draw.text((8, title_height), vulgo, fill="white")
+        draw.text((8, title_height + 8), "hat mit " + str(pios), fill="white")
+        draw.text((8, title_height + 16), "den Rekord", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
