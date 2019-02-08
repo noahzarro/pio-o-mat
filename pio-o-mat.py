@@ -643,7 +643,7 @@ def record():
     with canvas(device) as draw:
         display_title("Rekord", draw)
         draw.text((8, title_height), vulgo, fill="white")
-        draw.text((8, title_height + 8), "hat mit " + str(pios) + "pio", fill="white")
+        draw.text((8, title_height + 8), "hat mit " + str(pios) + " Pio", fill="white")
         draw.text((8, title_height + 16), "den Rekord", fill="white")
 
     # wait for user input

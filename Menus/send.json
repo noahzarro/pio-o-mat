@@ -1,1 +1,1 @@
-{"name": "send", "title": "Send Money", "back": "account", "sub": [], "function": "send_money"}
+{"name": "send", "title": "Geld senden", "back": "account", "sub": [], "function": "send_money"}
