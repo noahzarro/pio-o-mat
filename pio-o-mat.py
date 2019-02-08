@@ -614,7 +614,7 @@ def new_connection():
     with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as file_write:
         file_write.write("country=CH\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\n")
         for wlan in wlans:
-            file_write.write("network={\n   ssid=\"" + connection_data["ssid"] + "\"\n   psk=\"" + connection_data["passwort"] + "\"\n    key_mgmt=WPA-PSK\n    id_str=\"" + connection_data["ssid"] + "\"\n}\n")
+            file_write.write("network={\n   ssid=\"" + wlan["ssid"] + "\"\n   psk=\"" + wlan["passwort"] + "\"\n    key_mgmt=WPA-PSK\n    id_str=\"" + connection_data["ssid"] + "\"\n}\n")
 
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)
