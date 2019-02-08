@@ -613,7 +613,7 @@ def new_connection():
         if wlan["ssid"] == connection_data["ssid"]:
             wlans.remove(wlan)
 
-    wlans.add({"ssid":connection_data["ssid"], "passwort":connection_data["passwort"]})
+    wlans.append({"ssid":connection_data["ssid"], "passwort":connection_data["passwort"]})
 
     with open("wlan.pio", "w") as file_write:
         json.dump(wlans,file_write)
