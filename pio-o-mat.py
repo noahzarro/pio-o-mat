@@ -54,10 +54,8 @@ def backup():
 
     payload = {"load": payload_string}
 
-    r = requests.post(url, data=payload)
-
     try:
-        request = requests.get('http://people.ee.ethz.ch/~zarron/backup.php')
+        r = requests.post(url, data=payload)
     except:
         with canvas(device) as draw:
             display_title("Backup", draw)
@@ -676,7 +674,7 @@ empty_card = "                                                "
 master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
 # pio preis in Rappen
-pio_preis = 60
+pio_preis = 75
 
 # set GPIO pins
 KEY_UP_PIN     = 6

@@ -27,6 +27,17 @@ def get_piorist(user_id):
             response=piorist
     return response
 
+
+def set_piorist(new_piorist):
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        if int(piorist["card_id"]) == int(new_piorist["card_id"]):
+            piorists.remove(piorist)
+            piorists.append(new_piorist)
+            break
+
+
 def pay_pio(user_id,pio_preis):
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
