@@ -106,6 +106,8 @@ def new_account():
         display_title("Neuer Account", draw)
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
         draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+        with open("gitter.txt", "w") as write_file:
+            write_file.write(account_data["vulgo"])
 
     # wait for user input
     while True:
