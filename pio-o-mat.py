@@ -108,8 +108,6 @@ def new_account():
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
         draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
         print(account_data["vulgo"])
-        with codecs.open("gitter.txt", "w", "utf-8") as write_file:
-            write_file.write(account_data["vulgo"])
 
     # wait for user input
     while True:
@@ -613,7 +611,7 @@ def new_connection():
     with open("wlan.pio", "w") as file_write:
         json.dump(wlans,file_write)
 
-    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as file_write:
+    with codecs.open("/etc/wpa_supplicant/wpa_supplicant.conf", "w", "utf-8") as file_write:
         file_write.write("country=CH\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\n")
         for wlan in wlans:
             file_write.write("network={\n   ssid=\"" + wlan["ssid"] + "\"\n   psk=\"" + wlan["passwort"] + "\"\n    key_mgmt=WPA-PSK\n    id_str=\"" + wlan["ssid"] + "\"\n}\n")
