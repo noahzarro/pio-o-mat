@@ -18,6 +18,7 @@ import GPIO_button
 
 import json
 import requests
+import codecs
 
 # function definitions
 def display_title(title ,draw):
@@ -107,7 +108,7 @@ def new_account():
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
         draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
         print(account_data["vulgo"])
-        with open("gitter.txt", "w") as write_file:
+        with codecs.open("gitter.txt", "w", "utf-8") as write_file:
             write_file.write(account_data["vulgo"])
 
     # wait for user input
