@@ -104,8 +104,8 @@ def new_account():
     account_data = json.loads(request.text)
     with canvas(device) as draw:
         display_title("Neuer Account", draw)
-        draw.text((8, title_height), "Name: " + repr(account_data["name"]), fill="white")
-        draw.text((8, title_height + 8), "Vulgo: " + repr(account_data["vulgo"]), fill="white")
+        draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
+        draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
 
     # wait for user input
     while True:
