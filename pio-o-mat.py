@@ -728,10 +728,10 @@ def today_record():
             vulgo = piorist["vulgo"]
 
     with canvas(device) as draw:
-        display_title("Tagesrekord", draw)
+        display_title("Abendsrekord", draw)
         draw.text((8, title_height), vulgo, fill="white")
         draw.text((8, title_height + 8), "hat mit " + str(pios) + " Pio", fill="white")
-        draw.text((8, title_height + 16), "den Tagesrekord", fill="white")
+        draw.text((8, title_height + 16), "den Abendsrekord", fill="white")
 
     # wait for user input
     while True:
