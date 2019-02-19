@@ -143,6 +143,7 @@ def new_account():
         if button_ok.pressed():
             return "back"
 
+
 def pio():
     with canvas(device) as draw:
         display_title("Pio", draw)
@@ -170,15 +171,26 @@ def pio():
         user_id=0
         print("id not valid")
 
-    #
+    # pay pio and show result
     if user_id!=0:
-        response = piorist.pay_pio(user_id,pio_preis)
+
+        payer = piorist.get_piorist(user_id)
+        if not payer is None:
+            if payer["balance"] >= pio_preis:
+                response = "Zum Wohl, " + payer["vulgo"]
+                payer["balance"] = payer ["balance"] - pio_preis
+                payer["statistic"] = payer["statistic"] + 1
+                # TODO local statistics
+            else:
+                response = "Salo zu klein"
+
         with canvas(device) as draw:
             display_title("Pio", draw)
-            draw.text((8, title_height), response[0], fill="white")
-            if not response[1] == None:
-                draw.text((8, title_height + 8), response[1]["vulgo"], fill="white")
-                draw.text((8, title_height + 16), "Kontostand: " + str(response[1]["balance"]/100.0) + " Fr.", fill="white")
+            draw.text((8, title_height), response, fill="white")
+            draw.text((8, title_height + 8), "Kontostand: " + str(payer["balance"]/100.0) + " Fr.", fill="white")
+
+        piorist.set_piorist(payer)
+
     else:
         with canvas(device) as draw:
             display_title("Pio", draw)
@@ -192,6 +204,7 @@ def pio():
             return "pio"
         if button_ok.pressed():
             return "back"
+
 
 def erase():
     with canvas(device) as draw:
@@ -251,6 +264,7 @@ def erase():
             return "pio"
         if button_ok.pressed():
             return "back"
+
 
 def delete_account():
     with canvas(device) as draw:
@@ -333,7 +347,6 @@ def delete_account():
                 return "back"
 
 
-
 def info():
     with canvas(device) as draw:
         display_title("Info", draw)
@@ -384,10 +397,12 @@ def info():
         if button_ok.pressed():
             return "back"
 
+
 def send_money():
     with canvas(device) as draw:
         display_title("Info", draw)
-        draw.text((8, title_height), "Karte bitte", fill="white")
+        draw.text((8, title_height), "Sender", fill="white")
+        draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
     # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
@@ -414,6 +429,7 @@ def send_money():
 
     # check if master
     if read_id == master_id:
+        # TODO dayly statistics
         user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154}
 
     money_send = 0
@@ -464,7 +480,7 @@ def send_money():
 
     with canvas(device) as draw:
         display_title("Geld senden", draw)
-        draw.text((8, title_height), "Zweite", fill="white")
+        draw.text((8, title_height), "Empfänger", fill="white")
         draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
     # setup reader
@@ -530,8 +546,11 @@ def send_money():
 
     # update balance
     if not user["card_id"] == master_id:
-        piorist.change_balance(user["card_id"],-money_send)
-    piorist.change_balance(user2["card_id"],money_send)
+        user["balance"] -= money_send
+        piorist.set_piorist(user)
+
+    user2["balance"] += money_send
+    piorist.set_piorist(user2)
 
     # wait for user input
     while True:
@@ -541,6 +560,7 @@ def send_money():
             return "pio"
         if button_ok.pressed():
             return "back"
+
 
 def settings_exit():
     with canvas(device) as draw:
@@ -567,6 +587,7 @@ def settings_exit():
 
     GPIO.cleanup()
     exit()
+
 
 def new_connection():
     try:
@@ -630,12 +651,14 @@ def new_connection():
         if button_ok.pressed():
             return "back"
 
+
 def record():
     vulgo = "Niemand"
     pios = 0
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
     for piorist in piorists:
+        # TODO statistics
         if int(piorist["statistic"]) > pios:
             pios = piorist["statistic"]
             vulgo = piorist["vulgo"]
