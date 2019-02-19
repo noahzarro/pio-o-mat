@@ -753,7 +753,7 @@ image = Image.new('1', (width, height))
 title_height = 10
 
 # initialize device
-serial = spi(gpio={"CE":26} ,device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
+serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
 device = sh1106(serial, rotate=2)  # sh1106
 
 # empty card
