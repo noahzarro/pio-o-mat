@@ -38,6 +38,8 @@ def set_piorist(new_piorist):
             piorists.remove(piorist)
             piorists.append(new_piorist)
             break
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists,write_file)
 
 #
 # def pay_pio(user_id,pio_preis):

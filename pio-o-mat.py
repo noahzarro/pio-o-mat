@@ -681,6 +681,9 @@ def record():
             return "back"
 
 
+def new_day():
+
+
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
 
