@@ -681,6 +681,21 @@ def record():
 
 
 def new_day():
+
+    with canvas(device) as draw:
+        display_title("Neuer Abend", draw)
+        draw.text((8, title_height), "Abend Statistiken", fill="white")
+        draw.text((8, title_height + 8), "auf 0 setzen?", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
     for piorist in piorists:
@@ -688,6 +703,19 @@ def new_day():
     with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
 
+    with canvas(device) as draw:
+        display_title("Neuer Abend", draw)
+        draw.text((8, title_height), "Abend Statistiken", fill="white")
+        draw.text((8, title_height + 8), "auf 0 gesetzt", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
 
 def today_record():
     vulgo = "Niemand"
