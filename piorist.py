@@ -1,22 +1,22 @@
 # piorist
 import json
 
-class Piorist:
-    card_id = 0
-    name = ""
-    vulgo = ""
-    balance = 0
-    statistic = 0
-
-    def __init__(self, card_id, name, vulgo):
-        self.card_id = card_id
-        self.name = name
-        self.vulgo = vulgo
-        self.balance = 0
-        self.statistic = 0
-
-    def to_dict(self):
-        return dict({"name":self.name,"vulgo":self.vulgo,"card_id":self.card_id,"balance":self.balance,"statistic":self.statistic})
+# class Piorist:
+#     card_id = 0
+#     name = ""
+#     vulgo = ""
+#     balance = 0
+#     statistic = 0
+#
+#     def __init__(self, card_id, name, vulgo):
+#         self.card_id = card_id
+#         self.name = name
+#         self.vulgo = vulgo
+#         self.balance = 0
+#         self.statistic = 0
+#
+#     def to_dict(self):
+#         return dict({"name":self.name,"vulgo":self.vulgo,"card_id":self.card_id,"balance":self.balance,"statistic":self.statistic})
 
 
 # returns None if piorist not found
@@ -71,8 +71,7 @@ def create_piorist(name, vulgo):
     i = 1
     while True:
         if not i in ids:
-            new_piorist = Piorist(i,name,vulgo)
-            piorists.append(new_piorist.to_dict())
+            piorists.append({"card_id" : i, "name": name, "vulgo": vulgo, "balance": 0, "statistic": 0, "today": 0})
             break
         i += 1
 
@@ -80,7 +79,7 @@ def create_piorist(name, vulgo):
     with open("list.pio", "w") as write_file:
         json.dump(piorists,write_file)
 
-    return new_piorist.card_id
+    return i
 
 
 def delete_piorist(user_id):

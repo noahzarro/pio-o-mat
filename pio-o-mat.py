@@ -182,7 +182,7 @@ def pio():
                 response = "Zum Wohl, " + payer["vulgo"]
                 payer["balance"] = payer ["balance"] - pio_preis
                 payer["statistic"] = payer["statistic"] + 1
-                # TODO local statistics
+                payer["today"] = payer["today"] + 1
             else:
                 response = "Salo zu klein"
 
@@ -383,6 +383,7 @@ def info():
             draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
             draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
             draw.text((8, title_height+24), "Statistik: : " + str(user["statistic"]) + " Pio", fill="white")
+            draw.text((8, title_height+32), "Tagesstatistik: : " + str(user["today"]) + " Pio", fill="white")
 
     else:
         with canvas(device) as draw:
@@ -402,7 +403,7 @@ def info():
 
 def send_money():
     with canvas(device) as draw:
-        display_title("Info", draw)
+        display_title("Geld senden", draw)
         draw.text((8, title_height), "Sender", fill="white")
         draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
@@ -431,8 +432,7 @@ def send_money():
 
     # check if master
     if read_id == master_id:
-        # TODO dayly statistics
-        user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154}
+        user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154,"today":126}
 
     money_send = 0
     changed_send = True
@@ -660,7 +660,6 @@ def record():
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
     for piorist in piorists:
-        # TODO statistics
         if int(piorist["statistic"]) > pios:
             pios = piorist["statistic"]
             vulgo = piorist["vulgo"]
@@ -682,7 +681,38 @@ def record():
 
 
 def new_day():
-    print("new day")
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        piorist["today"] = 0
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists,write_file)
+
+
+def today_record():
+    vulgo = "Niemand"
+    pios = 0
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        if int(piorist["today"]) > pios:
+            pios = piorist["today"]
+            vulgo = piorist["vulgo"]
+
+    with canvas(device) as draw:
+        display_title("Tagesrekord", draw)
+        draw.text((8, title_height), vulgo, fill="white")
+        draw.text((8, title_height + 8), "hat mit " + str(pios) + " Pio", fill="white")
+        draw.text((8, title_height + 16), "den Tagesrekord", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
