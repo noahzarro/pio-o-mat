@@ -1,4 +1,5 @@
-# coding=<utf-8>
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # pio-o-mat, for managing beer consumption at serafins ruemli
 
 from luma.core.interface.serial import spi
