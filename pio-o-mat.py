@@ -482,7 +482,7 @@ def send_money():
 
     with canvas(device) as draw:
         display_title("Geld senden", draw)
-        draw.text((8, title_height), "Empfänger", fill="white")
+        draw.text((8, title_height), "Senden an:", fill="white")
         draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
     # setup reader
