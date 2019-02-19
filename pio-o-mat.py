@@ -682,7 +682,7 @@ def record():
 
 
 def new_day():
-
+    print("new day")
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()
