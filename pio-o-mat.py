@@ -383,7 +383,7 @@ def info():
             draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
             draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
             draw.text((8, title_height+24), "Statistik: : " + str(user["statistic"]) + " Pio", fill="white")
-            draw.text((8, title_height+32), "Tagesstatistik: : " + str(user["today"]) + " Pio", fill="white")
+            draw.text((8, title_height+32), "Abendsstatistik: : " + str(user["today"]) + " Pio", fill="white")
 
     else:
         with canvas(device) as draw:
