@@ -17,6 +17,7 @@ import SimpleMFRC522
 import piorist
 import Menu
 import GPIO_button
+import threading
 
 import json
 import requests
@@ -47,6 +48,25 @@ def draw_menu(device, menu, selection):
         print("except")
         return 1
 
+
+class buzzer(threading.Thread):
+    def __init__(self, mode):
+        self.mode = mode
+
+    def run(self):
+        if self.mode == "suc":
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
+            time.sleep(0.1)
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
+        elif self.mode == "fail":
+            for i in range(0, 5):
+                GPIO.output(BUZZER_PIN, GPIO.HIGH)
+                time.sleep(0.1)
+                GPIO.output(BUZZER_PIN, GPIO.LOW)
+                time.sleep(0.1)
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
+            time.sleep(1)
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 def backup():
 
@@ -146,6 +166,23 @@ def new_account():
             return "back"
 
 
+def clear_output():
+    GPIO.output(RED_PIN,GPIO.LOW)
+    GPIO.output(GREEN_PIN, GPIO.LOW)
+
+
+def success():
+    GPIO.output(GREEN_PIN,GPIO.HIGH)
+    buzzer_thread = buzzer("suc")
+    buzzer_thread.run()
+
+
+def failure():
+    GPIO.output(RED_PIN,GPIO.HIGH)
+    buzzer_thread = buzzer("fail")
+    buzzer_thread.run()
+
+
 def pio():
     with canvas(device) as draw:
         display_title("Pio", draw)
@@ -183,8 +220,10 @@ def pio():
                 payer["balance"] = payer ["balance"] - pio_preis
                 payer["statistic"] = payer["statistic"] + 1
                 payer["today"] = payer["today"] + 1
+                success()
             else:
-                response = "Salo zu klein"
+                response = "Saldo zu klein"
+                failure()
 
         with canvas(device) as draw:
             display_title("Pio", draw)
@@ -197,14 +236,18 @@ def pio():
         with canvas(device) as draw:
             display_title("Pio", draw)
             draw.text((8, title_height), "Benutzer unbekannt", fill="white")
+        failure()
 
     # wait for user input
     while True:
         if button_back.pressed():
+            clear_output()
             return "back"
         if button_pio.pressed():
+            clear_output()
             return "pio"
         if button_ok.pressed():
+            clear_output()
             return "back"
 
 
@@ -768,9 +811,13 @@ pio_preis = 75
 # set GPIO pins
 KEY_UP_PIN     = 6
 KEY_DOWN_PIN   = 19
-OK_PIN       = 21
+OK_PIN         = 21
 BACK_PIN       = 20
-PIO_PIN       = 16
+PIO_PIN        = 16
+
+RED_PIN        = 17
+GREEN_PIN      = 27
+BUZZER_PIN     = 22
 
 debounce_delay = 200
 debounce_delay_buttons = 500
@@ -781,6 +828,10 @@ GPIO.setup(KEY_DOWN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-u
 GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
+
+GPIO.setup(RED_PIN, GPIO.OUT)
+GPIO.setup(GREEN_PIN, GPIO.OUT)
+GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 button_up = GPIO_button.GPIO_button("up", KEY_UP_PIN, debounce_delay)
 button_down = GPIO_button.GPIO_button("down", KEY_DOWN_PIN, debounce_delay)
