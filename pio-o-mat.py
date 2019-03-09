@@ -23,6 +23,9 @@ import json
 import requests
 import codecs
 
+import random
+import string
+
 # function definitions
 def display_title(title ,draw):
     draw.rectangle([(0, 0), (128, title_height)], fill="white")
@@ -67,6 +70,7 @@ class buzzer(threading.Thread):
             GPIO.output(BUZZER_PIN, GPIO.HIGH)
             time.sleep(1)
             GPIO.output(BUZZER_PIN, GPIO.LOW)
+
 
 def backup():
 
@@ -785,6 +789,73 @@ def today_record():
             return "pio"
         if button_ok.pressed():
             return "back"
+
+
+def statistic_online():
+    url = "http://people.ee.ethz.ch/~zarron/send_statistic.php"
+
+    # load passwort
+    with open("password.json", "r") as read_file:
+        password = json.load(read_file)[0]
+
+    # load data for statistic
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+
+    vulgo = []
+    statistic = []
+    today = []
+
+    for piorist in piorists:
+        vulgo.append(piorist["vulgo"])
+        statistic.append(piorist["statistic"])
+        today.append(piorist["today"])
+
+    data = {"vulgo": vulgo, "statistic": statistic, "today": today}
+
+    # generate authentication token
+    auth = ""
+    for i in range(0, 6):
+        auth += random.choice(string.ascii_uppercase + string.digits)
+
+    print(auth)
+
+    payload = {"password": password, "auth": auth, "data": json.dumps(data)}
+
+    print(data)
+    print(type(data))
+
+    # send data
+    try:
+        r = requests.post(url, data=payload)
+        print(r.text)
+    except:
+        print("keine Verbindung")
+        with canvas(device) as draw:
+            display_title("Online Statistik", draw)
+            draw.text((8, title_height), "keine Verbindung", fill="white")
+
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    with canvas(device) as draw:
+        display_title("Online Statistik", draw)
+        draw.text((8, title_height), "Passwort:", fill="white")
+        draw.text((8, title_height + 8), auth, fill="white")
+
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
 
 # setup RFID-Device
 card_reader = SimpleMFRC522.SimpleMFRC522()

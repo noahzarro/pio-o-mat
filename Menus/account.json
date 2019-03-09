@@ -1,1 +1,1 @@
-{"name": "account", "title": "Account", "back": "main", "sub": ["info", "send", "delete", "record", "today_record"], "function": ""}
+{"name": "account", "title": "Account", "back": "main", "sub": ["info", "send", "delete", "record", "today_record", "statistic_online"], "function": ""}
