@@ -822,9 +822,6 @@ def statistic_online():
 
     payload = {"password": password, "auth": auth, "data": json.dumps(data)}
 
-    print(data)
-    print(type(data))
-
     # send data
     try:
         r = requests.post(url, data=payload)
