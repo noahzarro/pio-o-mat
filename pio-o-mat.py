@@ -72,6 +72,19 @@ class buzzer(threading.Thread):
             GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 
+class led(threading.Thread):
+    def __init__(self, mode):
+        self.mode = mode
+
+    def run(self):
+        if self.mode == "suc":
+            GPIO.output(GREEN_PIN, GPIO.HIGH)
+        elif self.mode == "fail":
+            GPIO.output(RED_PIN, GPIO.HIGH)
+        time.sleep(2)
+        clear_output()
+
+
 def backup():
 
     url = "http://people.ee.ethz.ch/~zarron/backup.php"
@@ -178,13 +191,17 @@ def clear_output():
 def success():
     GPIO.output(GREEN_PIN,GPIO.HIGH)
     buzzer_thread = buzzer("suc")
+    led_thread =  led("suc")
     buzzer_thread.run()
+    led_thread.run()
 
 
 def failure():
     GPIO.output(RED_PIN,GPIO.HIGH)
     buzzer_thread = buzzer("fail")
+    led_thread = led("fail")
     buzzer_thread.run()
+    led_thread.run()
 
 
 def pio():
@@ -245,13 +262,10 @@ def pio():
     # wait for user input
     while True:
         if button_back.pressed():
-            clear_output()
             return "back"
         if button_pio.pressed():
-            clear_output()
             return "pio"
         if button_ok.pressed():
-            clear_output()
             return "back"
 
 
@@ -864,7 +878,7 @@ image = Image.new('1', (width, height))
 title_height = 10
 
 # initialize device
-serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
+serial = spi(device=1, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
 device = sh1106(serial, rotate=2)  # sh1106
 
 # empty card
