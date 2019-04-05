@@ -89,10 +89,14 @@ def backup():
 
     url = "http://people.ee.ethz.ch/~zarron/backup.php"
 
+    # load passwort
+    with open("password.json", "r") as read_file:
+        password = json.load(read_file)[0]
+
     with open("list.pio", "r") as read_file:
         payload_string = json.dumps(json.load(read_file))
 
-    payload = {"load": payload_string}
+    payload = {"load": payload_string, "password": password}
 
     try:
         r = requests.post(url, data=payload)
@@ -779,6 +783,58 @@ def new_day():
             return "back"
 
 
+def welcome_new_day():
+
+    with canvas(device) as draw:
+        display_title("Willkommen", draw)
+        draw.text((8, title_height), "Neuer Abend", fill="white")
+        draw.text((8, title_height + 8), "beginnen?", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    with canvas(device) as draw:
+        display_title("Neuer Abend", draw)
+        draw.text((8, title_height), "Abend Statistiken", fill="white")
+        draw.text((8, title_height + 8), "auf 0 setzen?", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+    for piorist in piorists:
+        piorist["today"] = 0
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists,write_file)
+
+    with canvas(device) as draw:
+        display_title("Neuer Abend", draw)
+        draw.text((8, title_height), "Abend Statistiken", fill="white")
+        draw.text((8, title_height + 8), "auf 0 gesetzt", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 def today_record():
     vulgo = "Niemand"
     pios = 0
@@ -829,7 +885,7 @@ def statistic_online():
 
     # generate authentication token
     auth = ""
-    for i in range(0, 6):
+    for i in range(0, 4):
         auth += random.choice(string.ascii_uppercase + string.digits)
 
     print(auth)

@@ -1,1 +1,1 @@
-["main", "account", "new", "pio", "info", "send", "settings", "erase", "delete", "exit", "new_connection", "backup", "record", "new_day", "today_record", "statistic_online"]
+["main", "account", "new", "pio", "info", "send", "settings", "erase", "delete", "exit", "new_connection", "backup", "record", "new_day", "today_record", "statistic_online", "welcome_new_day"]

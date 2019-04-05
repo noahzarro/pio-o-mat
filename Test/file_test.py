@@ -4,6 +4,24 @@ import requests
 import random
 import string
 
+
+url = "http://people.ee.ethz.ch/~zarron/backup.php"
+
+# load passwort
+password = ""
+
+payload_string = "gitter test"
+
+payload = {"load": payload_string, "password": password}
+
+try:
+    r = requests.post(url, data=payload)
+    print(r.text)
+except:
+    print("gitter gatter gotter")
+
+"""
+
 url = "http://people.ee.ethz.ch/~zarron/send_statistic.php"
 
 # load passwort
@@ -43,3 +61,6 @@ try:
     print(r.text)
 except:
     print("keine Verbindung")
+
+
+"""
