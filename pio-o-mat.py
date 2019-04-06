@@ -999,7 +999,7 @@ time.sleep(1)
 
 # enter main menu
 selection = 0
-current_menu = "main"
+current_menu = "welcome_new_day"
 draw_menu(device, menus[current_menu], selection)
 changed = False
 
