@@ -1001,7 +1001,7 @@ time.sleep(1)
 selection = 0
 current_menu = "welcome_new_day"
 draw_menu(device, menus[current_menu], selection)
-changed = False
+changed = True
 
 while True:
 
