@@ -9,6 +9,8 @@ class SimpleMFRC522:
   
   KEY = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
   BLOCK_ADDRS = [8, 9, 10]
+  BLOCK_ADDRS_BASIC = [8, 9, 10]
+  BLOCK_ADDRS_SWISS_PASS = [0, 1 ,2]
   
   def __init__(self):
     self.READER = MFRC522.MFRC522()
@@ -16,8 +18,18 @@ class SimpleMFRC522:
   def read(self):
       id, text = self.read_no_block()        
       while not id:
-          id, text = self.read_no_block()  
+          id, text = self.read_no_block()
       return id, text
+
+  def read_swiss_pass(self):
+      self.override_block_addrs(self.BLOCK_ADDRS_SWISS_PASS)
+      id, text = self.read()
+      self.override_block_addrs(self.BLOCK_ADDRS_BASIC)
+      return id, text
+
+  def override_block_addrs(self, addrs):
+      for i in range(0,3):
+          self.BLOCK_ADDRS[i] = addrs[i]
 
   def read_id(self):
     id = self.read_id_no_block()
