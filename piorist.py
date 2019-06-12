@@ -69,7 +69,7 @@ def create_piorist(name, vulgo):
 
 def create_piorist_swiss_pass(name, vulgo, swiss_id):
     ids = set()
-    swiss_id = swiss_id.encode(encoding='UTF-8',errors='xmlcharrefreplace')
+    swiss_id = swiss_id.encode(encoding='UTF-8',errors='backslashreplace')
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
 
