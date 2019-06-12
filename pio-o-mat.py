@@ -470,7 +470,7 @@ def read_id():
         id, read_id = myReader.read_no_block_swiss_pass()
         print(read_id)
         if id is not None:
-            if not read_id.decode('latin_1') == "" or len(read_id) < 3:
+            if not read_id.decode('latin_1') == "" or not len(read_id) < 3:
                 print("found")
                 print(read_id)
                 print(read_id.decode('latin_1'))
