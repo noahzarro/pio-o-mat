@@ -469,6 +469,7 @@ def read_id():
             if not read_id.decode('latin_1') == "":
                 print("found")
                 print(read_id)
+                print(read_id.decode('latin_1'))
                 break
 
         if button_back.pressed():
