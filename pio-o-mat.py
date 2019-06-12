@@ -466,8 +466,8 @@ def read_id():
         id, read_id = myReader.read_no_block_swiss_pass()
         print(read_id)
         if id is not None:
-            print(read_id)
-            break
+            if not read_id.decode('latin_1') == "":
+                break
 
         if button_back.pressed():
             return "back", None
