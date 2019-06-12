@@ -311,7 +311,6 @@ def read_id():
             return "back", None
         if button_pio.pressed():
             return "pio", None
-
     print(read_id)
 
     # check whether id is swiss_id or card id
@@ -321,6 +320,8 @@ def read_id():
     except:
         user_id = read_id.decode('latin_1')
         print("swiss_id used")
+
+    print(user_id)
 
     return action, user_id
 
