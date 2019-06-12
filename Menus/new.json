@@ -1,1 +1,1 @@
-{"name": "new", "title": "Neuer Account", "back": "main", "sub": [], "function": "new_account"}
+{"name": "new", "title": "Neuer Account", "back": "main", "sub": ["pio_card", "swiss_pass"], "function": ""}

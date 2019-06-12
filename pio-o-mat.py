@@ -187,6 +187,86 @@ def new_account():
             return "back"
 
 
+def new_account_swiss_id():
+    try:
+        request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
+    except:
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "Keine Verbindung", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    account_data = json.loads(request.text)
+    with canvas(device) as draw:
+        display_title("Neuer Account", draw)
+        draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
+        draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+        print(account_data["vulgo"])
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    with canvas(device) as draw:
+        display_title("Swisspass", draw)
+        draw.text((8, title_height), "Swisspass bitte", fill="white")
+
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+
+    while True:
+        # try read swiss_id
+        id, read_id = myReader.read_no_block_swiss_id()
+        if id is not None:
+            break
+
+        if button_back.pressed():
+            return "back", None
+        if button_pio.pressed():
+            return "pio", None
+
+    print(read_id)
+
+    # check if card is empty
+    myReader = SimpleMFRC522.SimpleMFRC522()
+    r = myReader.read_swiss_pass()
+    print(r[1])
+    state = piorist.create_piorist_swiss_pass(account_data["name"],account_data["vulgo"])
+
+    if state == "ok":
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "erfolgreich!", fill="white")
+    if state == "in use":
+        with canvas(device) as draw:
+            display_title("Neuer Account", draw)
+            draw.text((8, title_height), "Swisspass", fill="white")
+            draw.text((16, title_height), "bereits in", fill="white")
+            draw.text((24, title_height), "Gebrauch", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 def clear_output():
     GPIO.output(RED_PIN,GPIO.LOW)
     GPIO.output(GREEN_PIN, GPIO.LOW)
@@ -208,47 +288,69 @@ def failure():
     led_thread.run()
 
 
-def pio():
-    with canvas(device) as draw:
-        display_title("Pio", draw)
-        draw.text((8, title_height), "Pio Bestellung", fill="white")
-        draw.text((8, title_height+8), "Karte bitte", fill="white")
+def read_id():
+    action = None
 
     # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
 
     # read until id got or cancelled
     id, read_id = myReader.read_no_block()
-    while not id:
+    while True:
+        # try read card_id
         id, read_id = myReader.read_no_block()
+        if id is not None:
+            break
+
+        # try read swiss_id
+        id, read_id = myReader.read_no_block_swiss_id()
+        if id is not None:
+            break
+
         if button_back.pressed():
-            return "back"
+            return "back", None
         if button_pio.pressed():
-            return "pio"
+            return "pio", None
 
     print(read_id)
 
-    # check whether id is valid
+    # check whether id is swiss_id or card id
     try:
-        user_id=int(read_id)
+        user_id = int(read_id)
+        print("card_id used")
     except:
-        user_id=0
-        print("id not valid")
+        user_id = read_id
+        print("swiss_id used")
+
+    return action, user_id
+
+
+def pio():
+    with canvas(device) as draw:
+        display_title("Pio", draw)
+        draw.text((8, title_height), "Pio Bestellung", fill="white")
+        draw.text((8, title_height+8), "Karte bitte", fill="white")
+
+    action, user_id = read_id()
+    print(action)
+    print(user_id)
+
+    if action is not None:
+        return action
 
     # pay pio and show result
-    if user_id!=0:
 
-        payer = piorist.get_piorist(user_id)
-        if not payer is None:
-            if payer["balance"] >= pio_preis:
-                response = "Zum Wohl, " + payer["vulgo"]
-                payer["balance"] = payer ["balance"] - pio_preis
-                payer["statistic"] = payer["statistic"] + 1
-                payer["today"] = payer["today"] + 1
-                success()
-            else:
-                response = "Saldo zu klein"
-                failure()
+    payer = piorist.get_piorist(user_id)
+    if not payer is None:
+        if payer["balance"] >= pio_preis:
+            response = "Zum Wohl, " + payer["vulgo"]
+            payer["balance"] = payer ["balance"] - pio_preis
+            payer["statistic"] = payer["statistic"] + 1
+            payer["today"] = payer["today"] + 1
+            success()
+        else:
+            response = "Saldo zu klein"
+            failure()
 
         with canvas(device) as draw:
             display_title("Pio", draw)
@@ -278,25 +380,9 @@ def erase():
         display_title("Karte formatieren", draw)
         draw.text((8, title_height), "Karte bitte", fill="white")
 
-    # setup reader
-    myReader = SimpleMFRC522.SimpleMFRC522()
-
-    # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
-    while not id:
-        id, read_id = myReader.read_no_block()
-        if button_back.pressed():
-            return "back"
-        if button_pio.pressed():
-            return "pio"
-
-    print(read_id)
-
-    # check whether id is valid
-    try:
-        user_id=int(read_id)
-    except:
-        user_id=0
+    action, user_id = read_id()
+    if action is not None:
+        return action
 
     # check if user exists do not delete
     user = piorist.get_piorist(user_id)
@@ -317,6 +403,7 @@ def erase():
                 return "back"
 
     # erase card
+    myReader = SimpleMFRC522.SimpleMFRC522()
     myReader.write(empty_card)
 
     # wait for user input
@@ -338,25 +425,9 @@ def delete_account():
         display_title("Benutzer entfernen", draw)
         draw.text((8, title_height), "Karte bitte", fill="white")
 
-    # setup reader
-    myReader = SimpleMFRC522.SimpleMFRC522()
-
-    # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
-    while not id:
-        id, read_id = myReader.read_no_block()
-        if button_back.pressed():
-            return "back"
-        if button_pio.pressed():
-            return "pio"
-
-    print(read_id)
-
-    # check whether id is valid
-    try:
-        user_id=int(read_id)
-    except:
-        user_id=0
+    action, user_id = read_id()
+    if action is not None:
+        return action
 
     # check if user exists do not delete
     user = piorist.get_piorist(user_id)
@@ -379,6 +450,7 @@ def delete_account():
                     return "back"
         else:
             # erase card
+            myReader = SimpleMFRC522.SimpleMFRC522()
             myReader.write(empty_card)
 
             # remove user

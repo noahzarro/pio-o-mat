@@ -7,9 +7,31 @@ def get_piorist(user_id):
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
     for piorist in piorists:
-        if int(piorist["card_id"]) == user_id:
+        if int(piorist["card_id"]) == user_id or piorist["swiss_id"] == user_id:
             response=piorist
     return response
+
+
+def add_card_id_to_swiss_id(swiss_id):
+    ids = set()
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+        for piorist in piorists:
+            ids.add(piorist["card_id"])
+
+    i = 1
+    while True:
+        if not i in ids:
+            for piorist in piorists:
+                if piorist["swiss_id"] == swiss_id:
+                    piorists["card_id"] = i
+            break
+        i += 1
+
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists, write_file)
+
+    return i
 
 
 def set_piorist(new_piorist):
@@ -34,7 +56,7 @@ def create_piorist(name, vulgo):
     i = 1
     while True:
         if not i in ids:
-            piorists.append({"card_id" : i, "name": name, "vulgo": vulgo, "balance": 0, "statistic": 0, "today": 0})
+            piorists.append({"card_id" : i, "swiss_id": "", "name": name, "vulgo": vulgo, "balance": 0, "statistic": 0, "today": 0})
             break
         i += 1
 
@@ -45,12 +67,29 @@ def create_piorist(name, vulgo):
     return i
 
 
+def create_piorist_swiss_pass(name, vulgo, swiss_id):
+    ids = set()
+    with open("list.pio", "r") as read_file:
+        piorists = json.load(read_file)
+
+    for piorist in piorists:
+        if swiss_id == piorist["swiss_id"]:
+            return "in use"
+
+    piorists.append({"card_id" : -1, "swiss_id": swiss_id, "name": name, "vulgo": vulgo, "balance": 0, "statistic": 0, "today": 0})
+
+    with open("list.pio", "w") as write_file:
+        json.dump(piorists,write_file)
+
+    return "ok"
+
+
 def delete_piorist(user_id):
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
 
     for piorist in piorists:
-        if int(piorist["card_id"])==user_id:
+        if int(piorist["card_id"])==user_id or piorist["swiss_id"] == user_id:
             piorists.remove(piorist)
 
     with open("list.pio", "w") as write_file:
