@@ -1,1 +1,1 @@
-["main", "account", "new", "pio", "info", "send", "settings", "erase", "delete", "exit", "new_connection", "backup", "record", "new_day", "today_record", "statistic_online", "welcome_new_day", "pio_card", "swiss_pass"]
+["main", "account", "new", "pio", "info", "send", "settings", "erase", "delete", "exit", "new_connection", "backup", "record", "new_day", "today_record", "statistic_online", "welcome_new_day", "pio_card", "swiss_pass", "statistic", "add_swiss_id", "add_card", "add_card_id"]

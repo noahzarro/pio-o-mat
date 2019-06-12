@@ -288,6 +288,167 @@ def failure():
     led_thread.run()
 
 
+def add_swiss_id():
+    with canvas(device) as draw:
+        display_title("Karte Hinzufügen", draw)
+        draw.text((8, title_height), "Pio Card", fill="white")
+        draw.text((8, title_height+8), "bitte", fill="white")
+
+    action, user_id = read_id()
+    if action is not None:
+        return action
+
+    # if it is swisspass, return
+    if type(user_id) != type(1):
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Dies ist keine", fill="white")
+            draw.text((8, title_height + 8), "Pio Card", fill="white")
+
+    user = piorist.get_piorist(user_id)
+    if not user is None:
+
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Benutzer gefunden", fill="white")
+            draw.text((8, title_height + 8), "Pio Card weghalten", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                break
+
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Swisspass bitte", fill="white")
+
+        action, new_id = read_id()
+        if action is not None:
+            return action
+
+        # if it is a pio card, return
+        if type(new_id) == type(1):
+            with canvas(device) as draw:
+                display_title("Karte Hinzufügen", draw)
+                draw.text((8, title_height), "Dies ist kein", fill="white")
+                draw.text((8, title_height + 8), "Swisspass", fill="white")
+
+        if piorist.get_piorist(new_id) is not None:
+            with canvas(device) as draw:
+                display_title("Karte Hinzufügen", draw)
+                draw.text((8, title_height), "Swisspass bereits", fill="white")
+                draw.text((8, title_height+8), "verwendet", fill="white")
+            failure()
+
+            # wait for user input
+            while True:
+                if button_back.pressed():
+                    return "back"
+                if button_pio.pressed():
+                    return "pio"
+                if button_ok.pressed():
+                    return "back"
+
+        user["swiss_id"] = new_id
+        piorist.set_piorist(user)
+
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Erfolg!", fill="white")
+
+    else:
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Benutzer unbekannt", fill="white")
+        failure()
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
+def add_card_id():
+    with canvas(device) as draw:
+        display_title("Karte Hinzufügen", draw)
+        draw.text((8, title_height), "Swisspass", fill="white")
+        draw.text((8, title_height+8), "bitte", fill="white")
+
+    action, user_id = read_id()
+    if action is not None:
+        return action
+
+    # if it is a pio card, return
+    if type(user_id) == type(1):
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Dies ist kein", fill="white")
+            draw.text((8, title_height+8), "Swisspass", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                return "back"
+
+    user = piorist.get_piorist(user_id)
+    if not user is None:
+
+        # get new id
+        new_id = piorist.add_card_id_to_swiss_id(user_id)
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Benutzer gefunden", fill="white")
+            draw.text((8, title_height+8), "Swisspass weghalten", fill="white")
+
+        # wait for user input
+        while True:
+            if button_back.pressed():
+                return "back"
+            if button_pio.pressed():
+                return "pio"
+            if button_ok.pressed():
+                break
+
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Pio Card bitte", fill="white")
+
+        # write new card
+        myReader = SimpleMFRC522.SimpleMFRC522()
+        myReader.write(str(new_id))
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "erfolgreich!", fill="white")
+
+
+    else:
+        with canvas(device) as draw:
+            display_title("Karte Hinzufügen", draw)
+            draw.text((8, title_height), "Benutzer unbekannt", fill="white")
+        failure()
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 def read_id():
     action = None
 
@@ -306,13 +467,11 @@ def read_id():
         print(read_id)
         if id is not None:
             break
-            print("fettig")
 
         if button_back.pressed():
             return "back", None
         if button_pio.pressed():
             return "pio", None
-    print(read_id)
 
     # check whether id is swiss_id or card id
     try:
@@ -493,25 +652,9 @@ def info():
         display_title("Info", draw)
         draw.text((8, title_height), "Karte bitte", fill="white")
 
-    # setup reader
-    myReader = SimpleMFRC522.SimpleMFRC522()
-
-    # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
-    while not id:
-        id, read_id = myReader.read_no_block()
-        if button_back.pressed():
-            return "back"
-        if button_pio.pressed():
-            return "pio"
-
-    print(read_id)
-
-    # check whether id is valid
-    try:
-        user_id=int(read_id)
-    except:
-        user_id=0
+    action, user_id = read_id()
+    if action is not None:
+        return action
 
     # gets user data
     user = piorist.get_piorist(user_id)
@@ -546,25 +689,9 @@ def send_money():
         draw.text((8, title_height), "Sender", fill="white")
         draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
-    # setup reader
-    myReader = SimpleMFRC522.SimpleMFRC522()
-
-    # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
-    while not id:
-        id, read_id = myReader.read_no_block()
-        if button_back.pressed():
-            return "back"
-        if button_pio.pressed():
-            return "pio"
-
-    print(read_id)
-
-    # check whether id is valid
-    try:
-        user_id=int(read_id)
-    except:
-        user_id=0
+    action, user_id = read_id()
+    if action is not None:
+        return action
 
     # gets user data
     user = piorist.get_piorist(user_id)
@@ -627,22 +754,9 @@ def send_money():
     # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
 
-    # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
-    while not id:
-        id, read_id = myReader.read_no_block()
-        if button_back.pressed():
-            return "back"
-        if button_pio.pressed():
-            return "pio"
-
-    print(read_id)
-
-    # check whether id is valid
-    try:
-        user_id = int(read_id)
-    except:
-        user_id = 0
+    action, user_id = read_id()
+    if action is not None:
+        return action
 
     # gets user data
     user2 = piorist.get_piorist(user_id)
