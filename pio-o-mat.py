@@ -461,7 +461,7 @@ def read_id():
         id, read_id = myReader.read_no_block()
         if id is not None:
             print("found pio card")
-            if read_id == master_id:
+            if read_id == master_id or read_id == empty_card:
                 return None, read_id
             print(read_id)
             print(read_id.decode('latin_1'))
@@ -470,10 +470,7 @@ def read_id():
                 int(read_id)
                 break
             except:
-                if read_id == empty_card:
-                    break
-                else:
-                    print("no pio card")
+                print("no pio card")
 
         # try read swiss_id
         id, read_id = myReader.read_no_block_swiss_pass()
