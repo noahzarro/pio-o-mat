@@ -461,6 +461,8 @@ def read_id():
         id, read_id = myReader.read_no_block()
         if id is not None:
             print("found pio card")
+            if read_id == master_id:
+                return None, read_id
             print(read_id)
             print(read_id.decode('latin_1'))
             print(len(read_id))
