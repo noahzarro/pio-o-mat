@@ -319,7 +319,7 @@ def read_id():
         user_id = int(read_id)
         print("card_id used")
     except:
-        user_id = read_id
+        user_id = read_id.decode('latin_1')
         print("swiss_id used")
 
     return action, user_id
