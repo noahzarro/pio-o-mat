@@ -464,7 +464,14 @@ def read_id():
             print(read_id)
             print(read_id.decode('latin_1'))
             print(len(read_id))
-            break
+            try:
+                int(read_id)
+                break
+            except:
+                if read_id == empty_card:
+                    break
+                else:
+                    print("no pio card")
 
         # try read swiss_id
         id, read_id = myReader.read_no_block_swiss_pass()
