@@ -449,6 +449,43 @@ def add_card_id():
             return "back"
 
 
+def prepare_card():
+
+    with canvas(device) as draw:
+        display_title("Karte Löschen", draw)
+        draw.text((8, title_height), "Achtung Karte", fill="white")
+        draw.text((8, title_height), "wird gelöscht!", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            break
+
+    # empty card
+    # setup reader
+    myReader = SimpleMFRC522.SimpleMFRC522()
+    myReader.write(empty_card)
+
+
+    with canvas(device) as draw:
+        display_title("Karte Löschen", draw)
+        draw.text((8, title_height), "Achtung Karte", fill="white")
+        draw.text((8, title_height), "wurde gelöscht!", fill="white")
+
+    # wait for user input
+    while True:
+        if button_back.pressed():
+            return "back"
+        if button_pio.pressed():
+            return "pio"
+        if button_ok.pressed():
+            return "back"
+
+
 def read_id():
     action = None
 
