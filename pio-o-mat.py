@@ -462,6 +462,7 @@ def read_id():
         if id is not None:
             print("found pio card")
             print(read_id)
+            print(read_id.decode('latin_1'))
             break
 
         # try read swiss_id
