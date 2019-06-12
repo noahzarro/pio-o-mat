@@ -229,7 +229,7 @@ def new_account_swiss_id():
 
     while True:
         # try read swiss_id
-        id, read_id = myReader.read_no_block_swiss_id()
+        id, read_id = myReader.read_no_block_swiss_pass()
         if id is not None:
             break
 
@@ -303,7 +303,7 @@ def read_id():
             break
 
         # try read swiss_id
-        id, read_id = myReader.read_no_block_swiss_id()
+        id, read_id = myReader.read_no_block_swiss_pass()
         if id is not None:
             break
 
