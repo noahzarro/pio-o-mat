@@ -244,7 +244,7 @@ def new_account_swiss_id():
     myReader = SimpleMFRC522.SimpleMFRC522()
     r = myReader.read_swiss_pass()
     print(r[1])
-    state = piorist.create_piorist_swiss_pass(account_data["name"],account_data["vulgo"])
+    state = piorist.create_piorist_swiss_pass(account_data["name"],account_data["vulgo"], r[1])
 
     if state == "ok":
         with canvas(device) as draw:
