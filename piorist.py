@@ -73,6 +73,8 @@ def create_piorist_swiss_pass(name, vulgo, swiss_id):
         piorists = json.load(read_file)
 
     for piorist in piorists:
+        print(type(swiss_id))
+        print(type(piorist["swiss_id"]))
         if swiss_id == piorist["swiss_id"]:
             return "in use"
 
