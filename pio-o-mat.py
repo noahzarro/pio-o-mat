@@ -715,6 +715,7 @@ def send_money():
     user = piorist.get_piorist(user_id)
 
     # check if master
+    print(read_id())
     if read_id == master_id:
         user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154,"today":126}
 
