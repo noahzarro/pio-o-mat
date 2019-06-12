@@ -460,6 +460,8 @@ def read_id():
         # try read card_id
         id, read_id = myReader.read_no_block()
         if id is not None:
+            print("found pio card")
+            print(read_id)
             break
 
         # try read swiss_id
