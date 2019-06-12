@@ -295,7 +295,6 @@ def read_id():
     myReader = SimpleMFRC522.SimpleMFRC522()
 
     # read until id got or cancelled
-    id, read_id = myReader.read_no_block()
     while True:
         # try read card_id
         id, read_id = myReader.read_no_block()
@@ -304,8 +303,10 @@ def read_id():
 
         # try read swiss_id
         id, read_id = myReader.read_no_block_swiss_pass()
+        print(read_id)
         if id is not None:
             break
+            print("fettig")
 
         if button_back.pressed():
             return "back", None
