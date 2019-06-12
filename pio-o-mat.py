@@ -463,6 +463,7 @@ def read_id():
             print("found pio card")
             print(read_id)
             print(read_id.decode('latin_1'))
+            print(len(read_id))
             break
 
         # try read swiss_id
