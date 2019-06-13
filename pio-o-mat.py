@@ -885,6 +885,7 @@ def send_money():
         draw.text((8, title_height + 24), "gesendet", fill="white")
 
     # update balance
+    print(type)
     if not type == "master":
         user["balance"] -= money_send
         piorist.set_piorist(user)

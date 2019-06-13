@@ -94,3 +94,5 @@ def delete_piorist(user_id):
 
     with open("list.pio", "w") as write_file:
         json.dump(piorists, write_file)
+
+
