@@ -21,12 +21,13 @@ if len(swiss_text) == 0:
         if pio_text == empty_card:
             print("Empty Card")
 
-        if pio_text == master_id:
+        elif pio_text == master_id:
             print("Master Card")
 
+        else:
+            print("Unwritten Card")
+
     print("Id = " + str(pio_id))
-    print("Raw: " + pio_text.decode('latin_1'))
-    print("length raw: " + str(len(pio_text)))
 
 else:
     print("Swiss Pass")
