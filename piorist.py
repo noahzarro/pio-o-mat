@@ -38,7 +38,7 @@ def set_piorist(new_piorist):
     with open("list.pio", "r") as read_file:
         piorists = json.load(read_file)
     for piorist in piorists:
-        if int(piorist["card_id"]) == int(new_piorist["card_id"]) or piorist["swiss_id"] == new_piorist["swiss_id"]:
+        if (piorist["card_id"] == new_piorist["card_id"]) or (piorist["swiss_id"] == new_piorist["swiss_id"]):
             piorists.remove(piorist)
             piorists.append(new_piorist)
             break

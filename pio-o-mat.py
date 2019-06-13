@@ -581,7 +581,7 @@ def pio():
     if not payer is None:
         if payer["balance"] >= pio_preis:
             response = "Zum Wohl, " + payer["vulgo"]
-            payer["balance"] = payer ["balance"] - pio_preis
+            payer["balance"] = payer["balance"] - pio_preis
             payer["statistic"] = payer["statistic"] + 1
             payer["today"] = payer["today"] + 1
             success()
