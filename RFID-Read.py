@@ -8,9 +8,16 @@ master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
 
 myReader = SimpleMFRC522.SimpleMFRC522()
-id, pio_text = myReader.read()
 
-id, swiss_text = myReader.read_swiss_pass()
+# read pio part
+id = None
+while id == None:
+    id, pio_text = myReader.read_no_block()
+
+# read swiss pass part
+id = None
+while id == None:
+    id, swiss_text = myReader.read_no_block_swiss_pass()
 
 if len(swiss_text) == 0:
     print("Pio Card")
