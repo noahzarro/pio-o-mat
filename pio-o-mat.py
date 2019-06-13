@@ -161,6 +161,10 @@ def new_account():
         if button_ok.pressed():
             break
 
+    with canvas(device) as draw:
+        display_title("Neuer Account", draw)
+        draw.text((8, title_height), "Karte bitte", fill="white")
+
     # check if card is empty
     action, ret_id, type, pio_type = read_id()
 
@@ -886,7 +890,7 @@ def send_money():
 
     # update balance
     print(type)
-    if not type == "master":
+    if not pio_type == "master":
         user["balance"] -= money_send
         piorist.set_piorist(user)
 
