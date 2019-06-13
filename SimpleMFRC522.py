@@ -11,6 +11,7 @@ class SimpleMFRC522:
   BLOCK_ADDRS = [8, 9, 10]
   BLOCK_ADDRS_BASIC = [8, 9, 10]
   BLOCK_ADDRS_SWISS_PASS = [0, 1 ,2]
+  BLOCK_ADDRS_MIDDLE = [4, 5, 6]
   
   def __init__(self):
     self.READER = MFRC522.MFRC522()
@@ -29,6 +30,12 @@ class SimpleMFRC522:
 
   def read_no_block_swiss_pass(self):
       self.override_block_addrs(self.BLOCK_ADDRS_SWISS_PASS)
+      id, text = self.read_no_block()
+      self.override_block_addrs(self.BLOCK_ADDRS_BASIC)
+      return id, text
+
+  def read_no_block_middle(self):
+      self.override_block_addrs(self.BLOCK_ADDRS_MIDDLE)
       id, text = self.read_no_block()
       self.override_block_addrs(self.BLOCK_ADDRS_BASIC)
       return id, text

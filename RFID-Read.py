@@ -14,3 +14,13 @@ print("Swiss Pass Card:")
 print(r[1])
 print("length: "+ str(len(r[1])))
 print(type(r[1]))
+
+id = None
+
+while id == None:
+    id, text = myReader.read_no_block_middle()
+
+print("Swiss Pass Card:")
+print(text)
+print("length: "+ str(text))
+print(type(text))
