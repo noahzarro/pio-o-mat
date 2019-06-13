@@ -25,7 +25,7 @@ if len(swiss_text) == 0:
             print("Master Card")
 
     print("Id = " + str(pio_id))
-    print("Raw: " + pio_text)
+    print("Raw: " + pio_text.decode('latin_1'))
     print("length raw: " + str(len(pio_text)))
 
 else:
