@@ -4,7 +4,7 @@ import Menu
 # load all menus
 menus = {}
 menu_list = []
-with open("Menus/list.menu","r") as list_file:
+with open("Menus/list.menu", "r") as list_file:
     menu_list = json.load(list_file)
     for menu_name in menu_list:
         with open("Menus/" + menu_name + ".json", "r") as menu_file:

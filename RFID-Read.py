@@ -4,26 +4,26 @@ import SimpleMFRC522
 empty_card = "                                                "
 
 # master_id
-master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
+master_id = "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
 
 myReader = SimpleMFRC522.SimpleMFRC522()
 
 # read pio part
 id = None
-while id == None:
+while id is None:
     id, pio_text = myReader.read_no_block()
 
 # read swiss pass part
 id = None
-while id == None:
+while id is None:
     id, swiss_text = myReader.read_no_block_swiss_pass()
 
 if len(swiss_text) == 0:
     print("Pio Card")
     try:
         pio_id = int(pio_text)
-    except:
+    except BaseException:
         pio_id = 0
         if pio_text == empty_card:
             print("Empty Card")
@@ -38,4 +38,4 @@ if len(swiss_text) == 0:
 
 else:
     print("Swiss Pass")
-    print("Id = " + swiss_text.decode('latin_1'))
+    print("Id = " + swiss_text.decode("latin_1"))

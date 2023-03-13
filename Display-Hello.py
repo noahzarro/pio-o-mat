@@ -23,9 +23,11 @@ result = myReader.read()
 # Make sure to create image with mode '1' for 1-bit color.
 width = 128
 height = 64
-image = Image.new('1', (width, height))
+image = Image.new("1", (width, height))
 
-serial = spi(device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
+serial = spi(
+    device=0, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25
+)
 
 device = sh1106(serial, rotate=2)  # sh1106
 
@@ -37,8 +39,7 @@ try:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
         draw.text((0, 0), "Suc se cuk", fill="white")
         draw.text((0, 8), "Fagitoli", fill="white")
-except:
+except BaseException:
     print("except")
 
 GPIO.cleanup()
-

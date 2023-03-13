@@ -4,7 +4,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-for i in range(1,40):
-    print("Pin " +str(GPIO.input(i)))
+for i in range(1, 40):
+    print("Pin " + str(GPIO.input(i)))
 
 GPIO.cleanup()

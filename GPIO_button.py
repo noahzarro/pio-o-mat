@@ -1,7 +1,9 @@
 import time
 import RPi.GPIO as GPIO
 
-current_milli_time = lambda: int(round(time.time() * 1000))
+
+def current_milli_time():
+    return int(round(time.time() * 1000))
 
 
 class GPIO_button:

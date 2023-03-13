@@ -17,7 +17,7 @@ payload = {"load": payload_string, "password": password}
 try:
     r = requests.post(url, data=payload)
     print(r.text)
-except:
+except BaseException:
     print("gitter gatter gotter")
 
 """

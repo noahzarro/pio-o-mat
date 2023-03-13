@@ -27,7 +27,9 @@ import random
 import string
 
 # function definitions
-def display_title(title ,draw):
+
+
+def display_title(title, draw):
     draw.rectangle([(0, 0), (128, title_height)], fill="white")
     draw.text((1, 1), title, fill="black")
 
@@ -40,14 +42,21 @@ def draw_menu(device, menu, selection):
             # draw title
             display_title(menu.title, draw)
             # draw submenus
-            i=0
+            i = 0
             for submenu in menu.sub:
-                draw.text((8,title_height+i*8),menus[submenu].title, fill="white")
+                draw.text((8, title_height + i * 8), menus[submenu].title, fill="white")
                 i += 1
             # draw selection
-            draw.polygon([(1,title_height+selection*8+2),(1,title_height+selection*8+8),(4,title_height+selection*8+5)], fill="white")
+            draw.polygon(
+                [
+                    (1, title_height + selection * 8 + 2),
+                    (1, title_height + selection * 8 + 8),
+                    (4, title_height + selection * 8 + 5),
+                ],
+                fill="white",
+            )
             return 0
-    except:
+    except BaseException:
         print("except")
         return 1
 
@@ -86,7 +95,6 @@ class led(threading.Thread):
 
 
 def backup():
-
     url = "http://people.ee.ethz.ch/~zarron/backup.php"
 
     # load passwort
@@ -100,7 +108,7 @@ def backup():
 
     try:
         r = requests.post(url, data=payload)
-    except:
+    except BaseException:
         with canvas(device) as draw:
             display_title("Backup", draw)
             draw.text((8, title_height), "Keine Verbindung", fill="white")
@@ -130,8 +138,8 @@ def backup():
 
 def new_account():
     try:
-        request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
-    except:
+        request = requests.get("http://people.ee.ethz.ch/~zarron/accountAPI.php")
+    except BaseException:
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
             draw.text((8, title_height), "Keine Verbindung", fill="white")
@@ -149,7 +157,9 @@ def new_account():
     with canvas(device) as draw:
         display_title("Neuer Account", draw)
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
-        draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+        draw.text(
+            (8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white"
+        )
         print(account_data["vulgo"])
 
     # wait for user input
@@ -171,8 +181,8 @@ def new_account():
     if action is not None:
         return action
 
-    if pio_type=="empty":
-        user_id = piorist.create_piorist(account_data["name"],account_data["vulgo"])
+    if pio_type == "empty":
+        user_id = piorist.create_piorist(account_data["name"], account_data["vulgo"])
 
         # write new id to pio card
         myReader = SimpleMFRC522.SimpleMFRC522()
@@ -185,13 +195,13 @@ def new_account():
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
             draw.text((8, title_height), "Das ist ein", fill="white")
-            draw.text((8, title_height+8), "Swisspass", fill="white")
+            draw.text((8, title_height + 8), "Swisspass", fill="white")
 
     else:
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
             draw.text((8, title_height), "Karte bereits", fill="white")
-            draw.text((8, title_height+8), "beschrieben", fill="white")
+            draw.text((8, title_height + 8), "beschrieben", fill="white")
 
     # wait for user input
     while True:
@@ -205,8 +215,8 @@ def new_account():
 
 def new_account_swiss_id():
     try:
-        request = requests.get('http://people.ee.ethz.ch/~zarron/accountAPI.php')
-    except:
+        request = requests.get("http://people.ee.ethz.ch/~zarron/accountAPI.php")
+    except BaseException:
         with canvas(device) as draw:
             display_title("Neuer Account", draw)
             draw.text((8, title_height), "Keine Verbindung", fill="white")
@@ -224,7 +234,9 @@ def new_account_swiss_id():
     with canvas(device) as draw:
         display_title("Neuer Account", draw)
         draw.text((8, title_height), "Name: " + account_data["name"], fill="white")
-        draw.text((8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white")
+        draw.text(
+            (8, title_height + 8), "Vulgo: " + account_data["vulgo"], fill="white"
+        )
         print(account_data["vulgo"])
 
     # wait for user input
@@ -239,7 +251,6 @@ def new_account_swiss_id():
     with canvas(device) as draw:
         display_title("Swisspass", draw)
         draw.text((8, title_height), "Swisspass bitte", fill="white")
-
 
     # read swiss_id
     action, ret_id, type, pio_type = read_id()
@@ -263,7 +274,9 @@ def new_account_swiss_id():
             if button_ok.pressed():
                 return "back"
 
-    state = piorist.create_piorist_swiss_pass(account_data["name"],account_data["vulgo"], ret_id)
+    state = piorist.create_piorist_swiss_pass(
+        account_data["name"], account_data["vulgo"], ret_id
+    )
 
     if state == "ok":
         with canvas(device) as draw:
@@ -287,20 +300,20 @@ def new_account_swiss_id():
 
 
 def clear_output():
-    GPIO.output(RED_PIN,GPIO.LOW)
+    GPIO.output(RED_PIN, GPIO.LOW)
     GPIO.output(GREEN_PIN, GPIO.LOW)
 
 
 def success():
-    GPIO.output(GREEN_PIN,GPIO.HIGH)
+    GPIO.output(GREEN_PIN, GPIO.HIGH)
     buzzer_thread = buzzer("suc")
-    led_thread =  led("suc")
+    led_thread = led("suc")
     buzzer_thread.run()
     led_thread.run()
 
 
 def failure():
-    GPIO.output(RED_PIN,GPIO.HIGH)
+    GPIO.output(RED_PIN, GPIO.HIGH)
     buzzer_thread = buzzer("fail")
     led_thread = led("fail")
     buzzer_thread.run()
@@ -311,7 +324,7 @@ def add_swiss_id():
     with canvas(device) as draw:
         display_title("Karte adden", draw)
         draw.text((8, title_height), "Pio Card", fill="white")
-        draw.text((8, title_height+8), "bitte", fill="white")
+        draw.text((8, title_height + 8), "bitte", fill="white")
 
     action, ret_id, type, pio_type = read_id()
     if action is not None:
@@ -325,8 +338,7 @@ def add_swiss_id():
             draw.text((8, title_height + 8), "Pio Card", fill="white")
 
     user = piorist.get_piorist(ret_id)
-    if not user is None:
-
+    if user is not None:
         with canvas(device) as draw:
             display_title("Karte adden", draw)
             draw.text((8, title_height), "Benutzer gefunden", fill="white")
@@ -360,7 +372,7 @@ def add_swiss_id():
             with canvas(device) as draw:
                 display_title("Karte adden", draw)
                 draw.text((8, title_height), "Swisspass bereits", fill="white")
-                draw.text((8, title_height+8), "verwendet", fill="white")
+                draw.text((8, title_height + 8), "verwendet", fill="white")
             failure()
 
             # wait for user input
@@ -399,7 +411,7 @@ def add_card_id():
     with canvas(device) as draw:
         display_title("Karte adden", draw)
         draw.text((8, title_height), "Swisspass", fill="white")
-        draw.text((8, title_height+8), "bitte", fill="white")
+        draw.text((8, title_height + 8), "bitte", fill="white")
 
     action, ret_id, type, pio_type = read_id()
     if action is not None:
@@ -410,7 +422,7 @@ def add_card_id():
         with canvas(device) as draw:
             display_title("Karte adden", draw)
             draw.text((8, title_height), "Dies ist kein", fill="white")
-            draw.text((8, title_height+8), "Swisspass", fill="white")
+            draw.text((8, title_height + 8), "Swisspass", fill="white")
 
         # wait for user input
         while True:
@@ -423,13 +435,12 @@ def add_card_id():
 
     user = piorist.get_piorist(ret_id)
     if user is not None:
-
         # get new id
         new_id = piorist.add_card_id_to_swiss_id(ret_id)
         with canvas(device) as draw:
             display_title("Karte adden", draw)
             draw.text((8, title_height), "Benutzer gefunden", fill="white")
-            draw.text((8, title_height+8), "Swisspass weghalten", fill="white")
+            draw.text((8, title_height + 8), "Swisspass weghalten", fill="white")
 
         # wait for user input
         while True:
@@ -468,7 +479,6 @@ def add_card_id():
 
 
 def prepare_card():
-
     with canvas(device) as draw:
         display_title("Karte radieren", draw)
         draw.text((8, title_height), "Achtung Karte", fill="white")
@@ -487,7 +497,6 @@ def prepare_card():
     # setup reader
     myReader = SimpleMFRC522.SimpleMFRC522()
     myReader.write(empty_card)
-
 
     with canvas(device) as draw:
         display_title("Karte radieren", draw)
@@ -515,7 +524,7 @@ def read_id():
 
     # read pio part
     id = None
-    while id == None:
+    while id is None:
         id, pio_text = myReader.read_no_block()
         if button_back.pressed():
             return "back", None, None, None
@@ -524,7 +533,7 @@ def read_id():
 
     # read swiss pass part
     id = None
-    while id == None:
+    while id is None:
         id, swiss_text = myReader.read_no_block_swiss_pass()
         if button_back.pressed():
             return "back", None, None, None
@@ -539,7 +548,7 @@ def read_id():
         try:
             pio_id = int(pio_text)
             pio_type = "normal"
-        except:
+        except BaseException:
             pio_id = 0
             if pio_text == empty_card:
                 print("Empty Card")
@@ -559,8 +568,8 @@ def read_id():
     else:
         print("Swiss Pass")
         type = "swiss"
-        print("Id = " + swiss_text.decode('latin_1'))
-        ret_id = swiss_text.decode('latin_1')
+        print("Id = " + swiss_text.decode("latin_1"))
+        ret_id = swiss_text.decode("latin_1")
 
     return action, ret_id, type, pio_type
 
@@ -569,7 +578,7 @@ def pio():
     with canvas(device) as draw:
         display_title("Pio", draw)
         draw.text((8, title_height), "Pio Bestellung", fill="white")
-        draw.text((8, title_height+8), "Karte bitte", fill="white")
+        draw.text((8, title_height + 8), "Karte bitte", fill="white")
 
     action, ret_id, type, pio_type = read_id()
     if action is not None:
@@ -578,7 +587,7 @@ def pio():
     # pay pio and show result
 
     payer = piorist.get_piorist(ret_id)
-    if not payer is None:
+    if payer is not None:
         if payer["balance"] >= pio_preis:
             response = "Zum Wohl, " + payer["vulgo"]
             payer["balance"] = payer["balance"] - pio_preis
@@ -592,7 +601,11 @@ def pio():
         with canvas(device) as draw:
             display_title("Pio", draw)
             draw.text((8, title_height), response, fill="white")
-            draw.text((8, title_height + 8), "Kontostand: " + str(payer["balance"]/100.0) + " Fr.", fill="white")
+            draw.text(
+                (8, title_height + 8),
+                "Kontostand: " + str(payer["balance"] / 100.0) + " Fr.",
+                fill="white",
+            )
 
         piorist.set_piorist(payer)
 
@@ -687,7 +700,7 @@ def delete_account():
             with canvas(device) as draw:
                 display_title("Benutzer entfernen", draw)
                 draw.text((8, title_height), "Kontostand von", fill="white")
-                draw.text((8, title_height + 8), user["vulgo"]+ " ist", fill="white")
+                draw.text((8, title_height + 8), user["vulgo"] + " ist", fill="white")
                 draw.text((8, title_height + 16), "nicht 0 Fr.", fill="white")
                 draw.text((8, title_height + 24), "zuerst leeren", fill="white")
 
@@ -752,10 +765,22 @@ def info():
         with canvas(device) as draw:
             display_title("Info", draw)
             draw.text((8, title_height), "Vulgo: " + user["vulgo"], fill="white")
-            draw.text((8, title_height+8), "Name: " + user["name"], fill="white")
-            draw.text((8, title_height+16), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
-            draw.text((8, title_height+24), "Statistik: " + str(user["statistic"]) + " Pio", fill="white")
-            draw.text((8, title_height+32), "Abendsstatistik: " + str(user["today"]) + " Pio", fill="white")
+            draw.text((8, title_height + 8), "Name: " + user["name"], fill="white")
+            draw.text(
+                (8, title_height + 16),
+                "Kontostand: " + str(user["balance"] / 100.0) + " Fr.",
+                fill="white",
+            )
+            draw.text(
+                (8, title_height + 24),
+                "Statistik: " + str(user["statistic"]) + " Pio",
+                fill="white",
+            )
+            draw.text(
+                (8, title_height + 32),
+                "Abendsstatistik: " + str(user["today"]) + " Pio",
+                fill="white",
+            )
 
     else:
         with canvas(device) as draw:
@@ -788,7 +813,14 @@ def send_money():
 
     # check if master
     if pio_type == "master":
-        user = {"name":"Master","vulgo":"Master","balance":10000,"card_id":master_id,"statistic":13154,"today":126}
+        user = {
+            "name": "Master",
+            "vulgo": "Master",
+            "balance": 10000,
+            "card_id": master_id,
+            "statistic": 13154,
+            "today": 126,
+        }
 
     money_send = 0
     changed_send = True
@@ -819,8 +851,16 @@ def send_money():
                 with canvas(device) as draw:
                     display_title("Geld senden", draw)
                     draw.text((8, title_height), user["vulgo"], fill="white")
-                    draw.text((8, title_height + 8), "Kontostand: " + str(user["balance"]/100.0) + " Fr.", fill="white")
-                    draw.text((8, title_height + 16), "senden: " + str(money_send/100.0) + " Fr.", fill="white")
+                    draw.text(
+                        (8, title_height + 8),
+                        "Kontostand: " + str(user["balance"] / 100.0) + " Fr.",
+                        fill="white",
+                    )
+                    draw.text(
+                        (8, title_height + 16),
+                        "senden: " + str(money_send / 100.0) + " Fr.",
+                        fill="white",
+                    )
     else:
         with canvas(device) as draw:
             display_title("Geld senden", draw)
@@ -869,7 +909,7 @@ def send_money():
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
         draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
-        draw.text((8, title_height + 16), "an "+ user2["vulgo"], fill="white")
+        draw.text((8, title_height + 16), "an " + user2["vulgo"], fill="white")
         draw.text((8, title_height + 24), "senden?", fill="white")
 
     # wait for confirmation
@@ -885,7 +925,7 @@ def send_money():
         display_title("Geld senden", draw)
         draw.text((8, title_height), "Von " + user["vulgo"], fill="white")
         draw.text((8, title_height + 8), str(money_send / 100.0) + " Fr.", fill="white")
-        draw.text((8, title_height + 16), "an "+ user2["vulgo"], fill="white")
+        draw.text((8, title_height + 16), "an " + user2["vulgo"], fill="white")
         draw.text((8, title_height + 24), "gesendet", fill="white")
 
     # update balance
@@ -936,8 +976,8 @@ def settings_exit():
 
 def new_connection():
     try:
-        request = requests.get('http://people.ee.ethz.ch/~zarron/wlanAPI.php')
-    except:
+        request = requests.get("http://people.ee.ethz.ch/~zarron/wlanAPI.php")
+    except BaseException:
         with canvas(device) as draw:
             display_title("Neue Verbindung", draw)
             draw.text((8, title_height), "Keine Verbindung", fill="white")
@@ -955,7 +995,11 @@ def new_connection():
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)
         draw.text((8, title_height), "SSID: " + connection_data["ssid"], fill="white")
-        draw.text((8, title_height + 8), "Passwort: " + connection_data["passwort"], fill="white")
+        draw.text(
+            (8, title_height + 8),
+            "Passwort: " + connection_data["passwort"],
+            fill="white",
+        )
 
     # wait for user input
     while True:
@@ -972,15 +1016,29 @@ def new_connection():
         if wlan["ssid"] == connection_data["ssid"]:
             wlans.remove(wlan)
 
-    wlans.append({"ssid":connection_data["ssid"], "passwort":connection_data["passwort"]})
+    wlans.append(
+        {"ssid": connection_data["ssid"], "passwort": connection_data["passwort"]}
+    )
 
     with open("wlan.pio", "w") as file_write:
-        json.dump(wlans,file_write)
+        json.dump(wlans, file_write)
 
-    with codecs.open("/etc/wpa_supplicant/wpa_supplicant.conf", "w", "utf-8") as file_write:
-        file_write.write("country=CH\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\n")
+    with codecs.open(
+        "/etc/wpa_supplicant/wpa_supplicant.conf", "w", "utf-8"
+    ) as file_write:
+        file_write.write(
+            "country=CH\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\n"
+        )
         for wlan in wlans:
-            file_write.write("network={\n   ssid=\"" + wlan["ssid"] + "\"\n   psk=\"" + wlan["passwort"] + "\"\n    key_mgmt=WPA-PSK\n    id_str=\"" + wlan["ssid"] + "\"\n}\n")
+            file_write.write(
+                'network={\n   ssid="'
+                + wlan["ssid"]
+                + '"\n   psk="'
+                + wlan["passwort"]
+                + '"\n    key_mgmt=WPA-PSK\n    id_str="'
+                + wlan["ssid"]
+                + '"\n}\n'
+            )
 
     with canvas(device) as draw:
         display_title("Neue Verbindung", draw)
@@ -1024,7 +1082,6 @@ def record():
 
 
 def new_day():
-
     with canvas(device) as draw:
         display_title("Neuer Abend", draw)
         draw.text((8, title_height), "Abend Statistiken", fill="white")
@@ -1044,7 +1101,7 @@ def new_day():
     for piorist in piorists:
         piorist["today"] = 0
     with open("list.pio", "w") as write_file:
-        json.dump(piorists,write_file)
+        json.dump(piorists, write_file)
 
     with canvas(device) as draw:
         display_title("Neuer Abend", draw)
@@ -1062,7 +1119,6 @@ def new_day():
 
 
 def welcome_new_day():
-
     with canvas(device) as draw:
         display_title("Willkommen", draw)
         draw.text((8, title_height), "Neuer Abend", fill="white")
@@ -1096,7 +1152,7 @@ def welcome_new_day():
     for piorist in piorists:
         piorist["today"] = 0
     with open("list.pio", "w") as write_file:
-        json.dump(piorists,write_file)
+        json.dump(piorists, write_file)
 
     with canvas(device) as draw:
         display_title("Neuer Abend", draw)
@@ -1174,7 +1230,7 @@ def statistic_online():
     try:
         r = requests.post(url, data=payload)
         print(r.text)
-    except:
+    except BaseException:
         print("keine Verbindung")
         with canvas(device) as draw:
             display_title("Online Statistik", draw)
@@ -1208,42 +1264,47 @@ card_reader = SimpleMFRC522.SimpleMFRC522()
 # create blank screen
 width = 128
 height = 64
-image = Image.new('1', (width, height))
+image = Image.new("1", (width, height))
 title_height = 10
 
 # initialize device
-serial = spi(device=1, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25)
+serial = spi(
+    device=1, port=0, bus_speed_hz=8000000, transfer_size=4096, gpio_DC=24, gpio_RST=25
+)
 device = sh1106(serial, rotate=2)  # sh1106
 
 # empty card
 empty_card = "                                                "
 
 # master_id
-master_id =  "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
+master_id = "piopiopiopiopiopiopiopiopiopiopiopiopiopiopiopio"
 
 # pio preis in Rappen
 pio_preis = 75
 
 # set GPIO pins
-KEY_UP_PIN     = 6
-KEY_DOWN_PIN   = 19
-OK_PIN         = 21
-BACK_PIN       = 20
-PIO_PIN        = 16
+KEY_UP_PIN = 6
+KEY_DOWN_PIN = 19
+OK_PIN = 21
+BACK_PIN = 20
+PIO_PIN = 16
 
-RED_PIN        = 17
-GREEN_PIN      = 27
-BUZZER_PIN     = 22
+RED_PIN = 17
+GREEN_PIN = 27
+BUZZER_PIN = 22
 
 debounce_delay = 200
 debounce_delay_buttons = 500
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(KEY_UP_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Input with pull-up
+# Input with pull-up
+GPIO.setup(KEY_UP_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(KEY_DOWN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-up
-GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
-GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
-GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
+GPIO.setup(OK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Input with pull-up
+# Input with pull-up
+GPIO.setup(BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Input with pull-up
+GPIO.setup(PIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 GPIO.setup(RED_PIN, GPIO.OUT)
 GPIO.setup(GREEN_PIN, GPIO.OUT)
@@ -1259,7 +1320,7 @@ button_pio = GPIO_button.GPIO_button("pio", PIO_PIN, debounce_delay_buttons)
 # menus = {"name":{dictionary of one menu}}
 menus = {}
 menu_list = []
-with open("Menus/list.menu","r") as list_file:
+with open("Menus/list.menu", "r") as list_file:
     menu_list = json.load(list_file)
     for menu_name in menu_list:
         with open("Menus/" + menu_name + ".json", "r") as menu_file:
@@ -1271,7 +1332,7 @@ try:
         # draw.rectangle(device.bounding_box, outline="white", fill="black")
         draw.text((0, 0), "Willkommen zum", fill="white")
         draw.text((0, 8), "Pio-o-Mat", fill="white")
-except:
+except BaseException:
     print("except")
 time.sleep(1)
 
@@ -1282,10 +1343,8 @@ draw_menu(device, menus[current_menu], selection)
 changed = True
 
 while True:
-
-
     if button_down.pressed():
-        if len(menus[current_menu].sub)-1 > selection:
+        if len(menus[current_menu].sub) - 1 > selection:
             selection += 1
             changed = True
             print("down")
@@ -1303,20 +1362,22 @@ while True:
         selection = 0
 
     if button_back.pressed():
-            print("back -> " + menus[current_menu].back)
-            current_menu = menus[current_menu].back
-            changed = True
-            selection = 0
+        print("back -> " + menus[current_menu].back)
+        current_menu = menus[current_menu].back
+        changed = True
+        selection = 0
 
     if button_pio.pressed():
-            current_menu = "pio"
-            changed = True
-            print("ok -> pio")
-            selection = 0
+        current_menu = "pio"
+        changed = True
+        print("ok -> pio")
+        selection = 0
 
     if changed:
         changed = False
-        if len(menus[current_menu].sub) != 0: # if there are any submenus, display menu screen, otherwise call function
+        # if there are any submenus, display menu screen, otherwise call
+        # function
+        if len(menus[current_menu].sub) != 0:
             if draw_menu(device, menus[current_menu], selection):
                 break
         else:

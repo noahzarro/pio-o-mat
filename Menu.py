@@ -5,7 +5,7 @@ class Menu:
     sub = []
     function = ""
 
-    def __init__(self, dict_menu = None):
+    def __init__(self, dict_menu=None):
         if dict_menu is not None:
             self.name = dict_menu["name"]
             self.title = dict_menu["title"]
@@ -14,4 +14,12 @@ class Menu:
             self.function = dict_menu["function"]
 
     def to_dict(self):
-        return dict({"name":self.name,"title":self.title,"back":self.back,"sub":self.sub,"function":self.function})
+        return dict(
+            {
+                "name": self.name,
+                "title": self.title,
+                "back": self.back,
+                "sub": self.sub,
+                "function": self.function,
+            }
+        )
